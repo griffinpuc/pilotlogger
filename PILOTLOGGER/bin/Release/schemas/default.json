@@ -1,0 +1,13 @@
+{
+  "0": "timestamp",
+  "1": "battery",
+  "2": "roll",
+  "3": "pitch",
+  "4": "yaw",
+  "5": "latitude",
+  "6": "longitude",
+  "7": "altitude",
+  "8": "velocity",
+  "9": "acceleration",
+  "10": "current"
+}
