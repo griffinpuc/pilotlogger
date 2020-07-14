@@ -124,13 +124,16 @@ namespace PILOTLOGGER {
             _serialPort.DtrEnable = true;
             _serialPort.Open();
 
+            _serialPort.NewLine = "\n";
+            _serialPort.ReadLine();
+
             while (true)
             {
                 if (!token.IsCancellationRequested)
                 {
-                    serialline = _serialPort.ReadExisting();
-                    OutputQueue.Add(serialline);
+                    serialline = _serialPort.ReadLine();
 
+                    OutputQueue.Add(serialline.Replace('\t', ',')); ;
                     Dispatcher.Invoke(new Action(() => {
                         logbox.consolelog.AppendText(serialline);
                         logbox.consolelog.ScrollToEnd();
