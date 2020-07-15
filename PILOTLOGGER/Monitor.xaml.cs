@@ -3,6 +3,7 @@ using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PILOTLOGGER
 {
@@ -47,6 +48,13 @@ namespace PILOTLOGGER
 
                 serialValues[index] = newSeries;
 
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    MenuItem item = new MenuItem { Header = code };
+                    item.Click += setGraphValue;
+                    graphcombo.Items.Add(item);
+                }));
+
                 index++;
             }
         }
@@ -64,13 +72,21 @@ namespace PILOTLOGGER
             chartSeries.Add(serialValues[0]);
         }
 
-        public void setGraphValue(int valueIndex)
+        public void setGraphValue(object sender, RoutedEventArgs e)
         {
             Dispatcher.Invoke(new Action(() =>
             {
+                graphcombo.SelectedItem = sender;
+                graphcombo.IsDropDownOpen = false;
                 chartSeries.Clear();
-                chartSeries.Add(serialValues[valueIndex]);
+                chartSeries.Add(serialValues[graphcombo.SelectedIndex]);
             }));
+        }
+
+        private void selectValue(object sender, RoutedEventArgs e)
+        {
+            graphcombo.SelectedItem = sender;
+            graphcombo.IsDropDownOpen = false;
         }
 
         public void addValues(string values)
@@ -86,7 +102,7 @@ namespace PILOTLOGGER
                     IChartValues chartValues = serialValues[index].Values;
                     chartValues.Add(double.Parse(value));
 
-                    if (chartValues.Count > 20)
+                    if (chartValues.Count > 80)
                     {
                         chartValues.RemoveAt(0);
                     }
