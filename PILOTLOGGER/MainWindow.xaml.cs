@@ -17,17 +17,23 @@ namespace PILOTLOGGER {
 
     public partial class MainWindow : Window
     {
-        LogBox logbox;
-        static SerialPort _serialPort = new SerialPort();
-        private BlockingCollection<string> OutputQueue;
-        Dictionary<string, CancellationTokenSource> threads = new Dictionary<string, CancellationTokenSource>();
+
+        SerialPort serialPort;
+        string workingDirectory;
+        string userDocumentsPath;
+        string schemaCode;
+        int schemaValueCount;
+        bool isLogging;
+
+        Monitor monitorWindow;
+
+        private BlockingCollection<string> OutputQueue; //Output queue for file writeout
+        Dictionary<string, CancellationTokenSource> threads; //Keep track of threads for serial monitor
 
         public MainWindow()
         {
             InitializeComponent();
-            loadSchemas();
-            loadOutputDir();
-            monitorCOM();
+            applicationStartup();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -37,27 +43,20 @@ namespace PILOTLOGGER {
             Application.Current.Shutdown();
         }
 
-        //START OF NEW REFRACTORED CODE
-
-        SerialPort serialPort;
-        string workingDirectory;
-        string userDocumentsPath;
-        string schemaCode;
-        int schemaValueCount;
-
         private void applicationStartup()
         {
             workingDirectory = Directory.GetCurrentDirectory();
+            threads = new Dictionary<string, CancellationTokenSource>();
             userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            //set box with path docs
+            outputBox.Text = userDocumentsPath;
 
-            newloadSchemas();
+            loadSchemas();
             monitorCOM();
         }
 
         /* LOAD SCHEMAS FROM SCHEMA DIRECTORY */
-        private void newloadSchemas()
+        private void loadSchemas()
         {
             //Find each schema file in directory
             foreach (string file in Directory.GetFiles(workingDirectory + "\\schemas"))
@@ -73,38 +72,129 @@ namespace PILOTLOGGER {
         }
 
         /* COM monitoring startup tasks (pre monitoring) */
-        private void startComMonitor()
+        private void startComMonitor(object sender, RoutedEventArgs e)
         {
             //Set serialport options for PILOT RC
             serialPort = new SerialPort()
             {
                 PortName = comcombo.SelectedItem.ToString(),
-                BaudRate = 11520,
+                BaudRate = 115200,
                 DtrEnable = true,
-                NewLine = "\n"
+                NewLine = "\r"
             };
-
-            //Write to file in background as data streams in
-            string outputFilename = userDocumentsPath + "PILOTLOG_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            var outputTask = Task.Factory.StartNew(() => writeFile(outputFilename), TaskCreationOptions.LongRunning);
 
             //Monitor the serial port in the background with cancel token
             CancellationTokenSource cts = new CancellationTokenSource();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(monitorSerialPort), cts.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(monitorCom), cts.Token);
             threads.Add(comcombo.SelectedItem.ToString(), cts);
+
+            //Modify user controls to reflect logging-in-progress
+            Dispatcher.Invoke(new Action(() =>
+            {
+                startBut.IsEnabled = false;
+                stopBut.IsEnabled = true;
+            }));
+
+            //Set labels and values
+            isLogging = true;
+            setStatus("Logging in progress...");
 
         }
 
         //COM monitoring closing tasks (post monitoring)
-        private void endComMonitor()
+        private void endComMonitor(object sender, RoutedEventArgs e)
         {
+            //Grab corresponding cancellation token
+            CancellationTokenSource cts = threads.Where(pair => pair.Key.Equals(comcombo.SelectedItem.ToString())).Select(pair => pair.Value).FirstOrDefault();
 
+            //Modify user controls to reflect end of logging
+            Dispatcher.Invoke(new Action(() =>
+            {
+                startBut.IsEnabled = true;
+                stopBut.IsEnabled = false;
+            }));
+
+            //Dispose of thread and cancellation token
+            serialPort.Close();
+            cts.Cancel();
+            Thread.Sleep(1500);
+            cts.Dispose();
+            threads.Remove(serialPort.PortName);
+
+            isLogging = false;
+            monitorWindow.Close();
+            setStatus("Logging completed!");
+        }
+
+        //COM monitor background task
+        private async void monitorCom(Object obj)
+        {
+            CancellationToken token = (CancellationToken)obj;
+
+            //Write to file in background as data streams in
+            OutputQueue = new BlockingCollection<string>();
+            string outputFilename =  "PILOTLOG_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var outputTask = Task.Factory.StartNew(() => writeFile(outputFilename), TaskCreationOptions.LongRunning);
+
+            //Create and open the monitor window
+            Dispatcher.Invoke(new Action(() =>
+            {
+                monitorWindow = new Monitor();
+                monitorWindow.Show();
+                monitorWindow.initChart();
+                monitorWindow.setValues(schemaCode);
+                monitorWindow.setChartDefault();
+            }));
+
+            await Task.Run(() =>
+            {
+
+                serialPort.Open();
+                serialPort.ReadLine();
+
+                int iter = 0;
+
+                while (true)
+                {
+                    if (!token.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            string readLine = serialPort.ReadLine().Replace("\n", "");
+                            string parsedLine = readLine.Replace("\t", ",");
+
+                            Console.WriteLine(readLine);
+                            OutputQueue.Add(parsedLine);
+                            monitorWindow.modifyContents(parsedLine);
+
+                            //Every x cycles, modiy graph
+                            if ((iter%10) == 0)
+                            {
+                                monitorWindow.addValues(parsedLine.Remove(parsedLine.Length - 1));
+                            }
+                            
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Error error error...");
+                        }
+                    }
+                    else
+                    {
+                        OutputQueue.CompleteAdding();
+                        outputTask.Wait();
+                        break;
+                    }
+
+                    iter++;
+                }
+            }); 
         }
 
         /* CSV File output method */
-        private async void writeFile(string fileName)
+        private void writeFile(string fileName)
         {
-            using (var strm = File.AppendText(fileName))
+            using (var strm = File.AppendText(Path.Combine(userDocumentsPath, fileName)))
             {
                 //Write schema code to first line for CSV
                 strm.WriteLine(schemaCode);
@@ -118,180 +208,36 @@ namespace PILOTLOGGER {
             }
         }
 
-        //COM monitor background task
-        private async void monitorCom(Object obj)
-        {
-            CancellationToken token = (CancellationToken)obj;
-
-            while (true)
-            {
-                if (!token.IsCancellationRequested)
-                {
-                    string readLine = serialPort.ReadLine();
-                    //if(readLine.Split())
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            endComMonitor();
-
-        }
-
-        //END OF NEW REFRACTORED CODE
-
-        public void loadSchemas()
-        {
-            foreach (string file in Directory.GetFiles(Directory.GetCurrentDirectory() + "\\schemas"))
-            {
-                string x = file.Split(new string[] { "\\" }, StringSplitOptions.None).Last();
-                MenuItem item = new MenuItem{ Header = x };
-                item.Click += selectSchema;
-                schemacombo.Items.Add(item);
-            }
-        }
-
+        /* Load the output directory and set the label */
         public void loadOutputDir()
         {
             outputBox.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
 
+        /* Update schema combobox on selection */
         private void selectSchema(object sender, RoutedEventArgs e)
         {
             schemacombo.SelectedItem = sender;
             schemacombo.IsDropDownOpen = false;
+            schemaCode = File.ReadAllText(Directory.GetCurrentDirectory() + "\\schemas\\" + schemacombo.Text);
+            schemaValueCount = schemaCode.Split(',').Length;
         }
 
-        private void startLog(object sender, RoutedEventArgs e)
-        {
-            CancellationTokenSource cts = new CancellationTokenSource();
-            comcombo.IsEnabled = false;
-
-            OutputQueue = new BlockingCollection<string>();
-
-            logbox = new LogBox();
-            logbox.Show();
-            startBut.IsEnabled = false;
-
-            _serialPort.PortName = comcombo.SelectedItem.ToString();
-            setStatus("Logging...");
-
-            ThreadPool.QueueUserWorkItem(new WaitCallback(monitorSerialPort), cts.Token);
-            threads.Add(comcombo.SelectedItem.ToString(), cts);
-
-            stopBut.IsEnabled = true;
-        }
-
-        private void stopLog(object sender, RoutedEventArgs e)
-        {
-            CancellationTokenSource cts = threads.Where(pair => pair.Key.Equals(comcombo.SelectedItem.ToString())).Select(pair => pair.Value).FirstOrDefault();
-            try
-            {
-                logbox.Close();
-                _serialPort.Close();
-                cts.Cancel();
-                Thread.Sleep(1500);
-                cts.Dispose();
-                threads.Remove(_serialPort.PortName);
-                comcombo.IsEnabled = true;
-                stopBut.IsEnabled = false;
-
-                setStatus("Not logging");
-                MessageBox.Show("Log saved!");
-                
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-
+        /* Open the output folder */
         private void openFolder(object sender, RoutedEventArgs e)
         {
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
         }
 
+        /* Open schema folder and reload files */
         private void uploadSchema(object sender, RoutedEventArgs e)
         {
             Process.Start(Directory.GetCurrentDirectory() + "\\schemas");
+            loadSchemas();
         }
 
 
-        private async void monitorSerialPort(Object obj)
-        {
-            var outputTask = Task.Factory.StartNew(() => logCOM("PILOTLOG_" + DateTime.Now.ToString("yyyyMMddHHmmss")), TaskCreationOptions.LongRunning);
-            CancellationToken token = (CancellationToken)obj;
-            string serialline;
-
-            _serialPort.BaudRate = 115200;
-            _serialPort.DtrEnable = true;
-            _serialPort.Open();
-
-            _serialPort.NewLine = "\n";
-            _serialPort.ReadLine();
-
-            while (true)
-            {
-                if (!token.IsCancellationRequested)
-                {
-                    serialline = _serialPort.ReadLine();
-
-                    OutputQueue.Add(serialline.Replace('\t', ','));
-                    Dispatcher.Invoke(new Action(() => {
-                        logbox.consolelog.AppendText(serialline);
-                        logbox.consolelog.ScrollToEnd();
-                    }));
-
-                }
-                else
-                {
-                    OutputQueue.CompleteAdding();
-                    outputTask.Wait();
-                    break;
-                }
-
-                Thread.Sleep(50);
-            }
-        }
-
-        void logCOM(string fname)
-        {
-
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var subFolderPath = System.IO.Path.Combine(path, fname + ".csv");
-            string schemaname = "";
-
-            Dispatcher.Invoke(new Action(() =>
-            {
-                schemaname = schemacombo.Text;
-            }));
-
-            using (var strm = File.AppendText(subFolderPath))
-            {
-                    JObject o = JObject.Parse(File.ReadAllText(Directory.GetCurrentDirectory() + "\\schemas\\" + schemaname));
-
-                string schema = "";
-                foreach(var p in o) {
-                    schema += p.Value + ",";
-                }
-
-                logbox.setSeries(schema.Remove(schema.Length - 1));
-
-                strm.WriteLine(schema);
-                foreach (var s in OutputQueue.GetConsumingEnumerable())
-                {
-                    string[] vals = s.Split(',');
-                    logbox.setSeriesLine(vals.Take(vals.Count() - 1).ToArray());
-
-                    strm.WriteLine(s);
-
-                    strm.Flush();
-                }
-            }
-        }
-
+        /* Monitor COM ports for any changes and update combo */
         private async void monitorCOM()
         {
             try
@@ -303,6 +249,8 @@ namespace PILOTLOGGER {
                         string[] openComs = SerialPort.GetPortNames();
 
                         Dispatcher.Invoke(new Action(() => {
+
+                            //Check for new COMS
                             foreach (string com in openComs)
                             {
                                 if (!comcombo.Items.Contains(com))
@@ -310,6 +258,8 @@ namespace PILOTLOGGER {
                                     comcombo.Items.Add(com);
                                 }
                             }
+
+                            //Check for disconnected COMS
                             foreach (string com in comcombo.Items.OfType<string>().ToList())
                             {
                                 if (!openComs.Contains(com))
@@ -318,9 +268,10 @@ namespace PILOTLOGGER {
                                 }
                             }
 
-                            if (comcombo.SelectedItem != null)
+                            //Check selected COM
+                            if (comcombo.SelectedItem != null && !isLogging)
                             {
-
+                                //Check if a schema is selected
                                 if (schemacombo.SelectedItem != null)
                                 {
                                     startBut.IsEnabled = true;
@@ -343,6 +294,7 @@ namespace PILOTLOGGER {
             }
         }
 
+        /* Set status label */
         private void setStatus(string status)
         {
             Dispatcher.Invoke(new Action(() =>

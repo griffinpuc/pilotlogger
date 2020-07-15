@@ -17,8 +17,8 @@
                 <Label Content="Log Output Directory" HorizontalAlignment="Left" Margin="124,60,0,0" VerticalAlignment="Top"/>
                 <Label Content="COM Port" HorizontalAlignment="Left" Margin="153,119,0,0" VerticalAlignment="Top"/>
                 <ComboBox x:Name="comcombo" HorizontalAlignment="Left" Margin="70,151,0,0" VerticalAlignment="Top" Width="226"/>
-                <Button x:Name="startBut" Click="startLog" Content="Start Logging" HorizontalAlignment="Left" Margin="20,243,0,-129.8" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
-                <Button x:Name="stopBut" Click="stopLog" Content="Stop Logging" HorizontalAlignment="Left" Margin="199,243,0,-129.8" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
+                <Button x:Name="startBut" Click="startComMonitor" Content="Start Logging" HorizontalAlignment="Left" Margin="20,243,0,-129.8" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
+                <Button x:Name="stopBut" Click="endComMonitor" Content="Stop Logging" HorizontalAlignment="Left" Margin="199,243,0,-129.8" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
                 <Label Content="STATUS:" HorizontalAlignment="Left" Margin="124,212,0,-54.8" VerticalAlignment="Top" Width="55" FontWeight="Bold"/>
                 <Label x:Name="statusLabel" Content="NOT CONNECTED" HorizontalAlignment="Left" Margin="184,212,0,-54.8" VerticalAlignment="Top" Width="146"/>
             </Grid>

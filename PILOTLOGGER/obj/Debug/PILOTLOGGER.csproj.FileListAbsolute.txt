@@ -51,13 +51,16 @@ C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\LiveCharts.xml
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\LiveCharts.Wpf.pdb
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\LiveCharts.Wpf.xml
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\Newtonsoft.Json.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.csprojAssemblyReference.cache
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\LogBox.g.cs
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\MainWindow.g.cs
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\Monitor.g.cs
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\App.g.cs
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER_MarkupCompile.cache
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER_MarkupCompile.lref
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\LogBox.baml
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\MainWindow.baml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\Monitor.baml
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.g.resources
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.Properties.Resources.resources
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.csproj.GenerateResource.cache
@@ -65,4 +68,3 @@ C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.csproj.Co
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.csproj.CopyComplete
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.exe
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.pdb
-C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.csprojAssemblyReference.cache
