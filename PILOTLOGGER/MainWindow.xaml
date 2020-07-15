@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PILOTLOGGER"
         mc:Ignorable="d"
-        Title="PILOT LOGGER" Height="407.4" Width="415.6">
+        Title="PILOT LOGGER" Height="480.6" Width="415.6">
     <Grid Margin="0,0,-13.6,-17">
-        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="206" Margin="10,25,0,0" VerticalAlignment="Top" Width="385">
+        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="206" Margin="10,84,0,0" VerticalAlignment="Top" Width="385">
             <Grid>
                 <Button Click="uploadSchema" Content="Upload Schema" HorizontalAlignment="Left" Margin="265,30,0,0" VerticalAlignment="Top" Width="98"/>
                 <ComboBox x:Name="schemacombo" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top" Width="226"/>
@@ -23,6 +23,8 @@
                 <Label x:Name="statusLabel" Content="NOT CONNECTED" HorizontalAlignment="Left" Margin="184,212,0,-54.8" VerticalAlignment="Top" Width="146"/>
             </Grid>
         </GroupBox>
+        <Image HorizontalAlignment="Left" Height="51" Margin="34,10,0,0" VerticalAlignment="Top" Width="66" Source="drone.png"/>
+        <Label Content="PILOT LOGGER" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="291" Height="59" FontSize="36" FontWeight="Bold" FontFamily="Segoe UI Black"/>
 
     </Grid>
 </Window>

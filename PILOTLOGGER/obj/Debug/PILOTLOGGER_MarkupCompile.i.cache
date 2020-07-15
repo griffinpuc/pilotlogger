@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\griff\Workspace\pilotcontroller\PILOTLOGGER\PILOTLOGGER\obj\Debug\
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\
 PILOTLOGGER
 none
 false
 DEBUG;TRACE
-C:\Users\griff\Workspace\pilotcontroller\PILOTLOGGER\PILOTLOGGER\App.xaml
-31887231867
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\App.xaml
+2-2051799
 
-8481686312
-151320127201
-Charting.xaml;LogBox.xaml;MainWindow.xaml;
+7-1786918746
+18-221892318
+LogBox.xaml;MainWindow.xaml;
 
-True
+False
 

@@ -1,23 +1,17 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LiveCharts.Wpf;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PILOTLOGGER {
 
@@ -25,21 +19,128 @@ namespace PILOTLOGGER {
     {
         LogBox logbox;
         static SerialPort _serialPort = new SerialPort();
-        private BlockingCollection<string> OutputQueue = new BlockingCollection<string>();
+        private BlockingCollection<string> OutputQueue;
         Dictionary<string, CancellationTokenSource> threads = new Dictionary<string, CancellationTokenSource>();
 
         public MainWindow()
         {
-
-            //MessageBox.Show("PILOT LOGGER \nv1.0");
-
-            logbox = new LogBox();
-
             InitializeComponent();
             loadSchemas();
             loadOutputDir();
             monitorCOM();
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
+        }
+
+        //START OF NEW REFRACTORED CODE
+
+        SerialPort serialPort;
+        string workingDirectory;
+        string userDocumentsPath;
+        string schemaCode;
+        int schemaValueCount;
+
+        private void applicationStartup()
+        {
+            workingDirectory = Directory.GetCurrentDirectory();
+            userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            //set box with path docs
+
+            newloadSchemas();
+            monitorCOM();
+        }
+
+        /* LOAD SCHEMAS FROM SCHEMA DIRECTORY */
+        private void newloadSchemas()
+        {
+            //Find each schema file in directory
+            foreach (string file in Directory.GetFiles(workingDirectory + "\\schemas"))
+            {
+                //Parse out filename
+                string fileName = file.Split(new string[] { "\\" }, StringSplitOptions.None).Last();
+
+                //Build menu item and add to COM combobox
+                MenuItem item = new MenuItem { Header = fileName };
+                item.Click += selectSchema;
+                schemacombo.Items.Add(item);
+            }
+        }
+
+        /* COM monitoring startup tasks (pre monitoring) */
+        private void startComMonitor()
+        {
+            //Set serialport options for PILOT RC
+            serialPort = new SerialPort()
+            {
+                PortName = comcombo.SelectedItem.ToString(),
+                BaudRate = 11520,
+                DtrEnable = true,
+                NewLine = "\n"
+            };
+
+            //Write to file in background as data streams in
+            string outputFilename = userDocumentsPath + "PILOTLOG_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            var outputTask = Task.Factory.StartNew(() => writeFile(outputFilename), TaskCreationOptions.LongRunning);
+
+            //Monitor the serial port in the background with cancel token
+            CancellationTokenSource cts = new CancellationTokenSource();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(monitorSerialPort), cts.Token);
+            threads.Add(comcombo.SelectedItem.ToString(), cts);
+
+        }
+
+        //COM monitoring closing tasks (post monitoring)
+        private void endComMonitor()
+        {
+
+        }
+
+        /* CSV File output method */
+        private async void writeFile(string fileName)
+        {
+            using (var strm = File.AppendText(fileName))
+            {
+                //Write schema code to first line for CSV
+                strm.WriteLine(schemaCode);
+
+                //As each new line comes in write to file
+                foreach (var dataLine in OutputQueue.GetConsumingEnumerable())
+                {
+                    strm.WriteLine(dataLine);
+                    strm.Flush();
+                }
+            }
+        }
+
+        //COM monitor background task
+        private async void monitorCom(Object obj)
+        {
+            CancellationToken token = (CancellationToken)obj;
+
+            while (true)
+            {
+                if (!token.IsCancellationRequested)
+                {
+                    string readLine = serialPort.ReadLine();
+                    //if(readLine.Split())
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            endComMonitor();
+
+        }
+
+        //END OF NEW REFRACTORED CODE
 
         public void loadSchemas()
         {
@@ -68,6 +169,9 @@ namespace PILOTLOGGER {
             CancellationTokenSource cts = new CancellationTokenSource();
             comcombo.IsEnabled = false;
 
+            OutputQueue = new BlockingCollection<string>();
+
+            logbox = new LogBox();
             logbox.Show();
             startBut.IsEnabled = false;
 
@@ -86,6 +190,7 @@ namespace PILOTLOGGER {
             try
             {
                 logbox.Close();
+                _serialPort.Close();
                 cts.Cancel();
                 Thread.Sleep(1500);
                 cts.Dispose();
@@ -133,7 +238,7 @@ namespace PILOTLOGGER {
                 {
                     serialline = _serialPort.ReadLine();
 
-                    OutputQueue.Add(serialline.Replace('\t', ',')); ;
+                    OutputQueue.Add(serialline.Replace('\t', ','));
                     Dispatcher.Invoke(new Action(() => {
                         logbox.consolelog.AppendText(serialline);
                         logbox.consolelog.ScrollToEnd();
@@ -165,15 +270,23 @@ namespace PILOTLOGGER {
 
             using (var strm = File.AppendText(subFolderPath))
             {
-                JObject o = JObject.Parse(File.ReadAllText(Directory.GetCurrentDirectory() + "\\schemas\\" + schemaname));
+                    JObject o = JObject.Parse(File.ReadAllText(Directory.GetCurrentDirectory() + "\\schemas\\" + schemaname));
 
                 string schema = "";
-                foreach(var p in o) { schema += p.Value + ","; }
+                foreach(var p in o) {
+                    schema += p.Value + ",";
+                }
+
+                logbox.setSeries(schema.Remove(schema.Length - 1));
 
                 strm.WriteLine(schema);
                 foreach (var s in OutputQueue.GetConsumingEnumerable())
                 {
+                    string[] vals = s.Split(',');
+                    logbox.setSeriesLine(vals.Take(vals.Count() - 1).ToArray());
+
                     strm.WriteLine(s);
+
                     strm.Flush();
                 }
             }
@@ -220,7 +333,7 @@ namespace PILOTLOGGER {
                             }
                         }));
 
-                        System.Threading.Thread.Sleep(1000);
+                        Thread.Sleep(1000);
                     }
                 });
             }

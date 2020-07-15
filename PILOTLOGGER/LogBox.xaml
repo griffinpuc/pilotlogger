@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PILOTLOGGER"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="LogBox" Height="450" Width="800">
+        Title="LogBox" Height="646" Width="1187.2">
     <Grid>
-        <RichTextBox x:Name="consolelog" HorizontalAlignment="Left" Height="423" VerticalAlignment="Top" Width="795" TextChanged="RichTextBox_TextChanged" Background="Black" Foreground="White" Margin="0,0,0,-0.2">
+        <RichTextBox x:Name="consolelog" HorizontalAlignment="Left" Height="94" VerticalAlignment="Top" Width="1182" TextChanged="RichTextBox_TextChanged" Background="Black" Foreground="White" IsEnabled="False">
             <FlowDocument/>
         </RichTextBox>
-
+        <lvc:CartesianChart x:Name="chart" Series="{Binding SeriesCollection}" Margin="0,99,10.4,-15.2" />
     </Grid>
 </Window>
