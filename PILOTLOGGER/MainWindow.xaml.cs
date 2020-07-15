@@ -23,12 +23,12 @@ namespace PILOTLOGGER {
         string userDocumentsPath;
         string schemaCode;
         int schemaValueCount;
+        bool isLogging;
 
-        //Output queue for file writeout
-        private BlockingCollection<string> OutputQueue;
+        Monitor monitorWindow;
 
-        //Keep track of threads for serial monitor
-        Dictionary<string, CancellationTokenSource> threads = new Dictionary<string, CancellationTokenSource>();
+        private BlockingCollection<string> OutputQueue; //Output queue for file writeout
+        Dictionary<string, CancellationTokenSource> threads; //Keep track of threads for serial monitor
 
         public MainWindow()
         {
@@ -46,6 +46,7 @@ namespace PILOTLOGGER {
         private void applicationStartup()
         {
             workingDirectory = Directory.GetCurrentDirectory();
+            threads = new Dictionary<string, CancellationTokenSource>();
             userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             //set box with path docs
@@ -79,7 +80,7 @@ namespace PILOTLOGGER {
                 PortName = comcombo.SelectedItem.ToString(),
                 BaudRate = 115200,
                 DtrEnable = true,
-                NewLine = "\r" //Newline character (Test script uses /r)
+                NewLine = "\r"
             };
 
             //Monitor the serial port in the background with cancel token
@@ -93,6 +94,9 @@ namespace PILOTLOGGER {
                 startBut.IsEnabled = false;
                 stopBut.IsEnabled = true;
             }));
+
+            //Set labels and values
+            isLogging = true;
             setStatus("Logging in progress...");
 
         }
@@ -117,6 +121,7 @@ namespace PILOTLOGGER {
             cts.Dispose();
             threads.Remove(serialPort.PortName);
 
+            isLogging = false;
             setStatus("Logging completed!");
         }
 
@@ -130,10 +135,21 @@ namespace PILOTLOGGER {
             string outputFilename =  "PILOTLOG_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
             var outputTask = Task.Factory.StartNew(() => writeFile(outputFilename), TaskCreationOptions.LongRunning);
 
+            //Create and open the monitor window
+            Dispatcher.Invoke(new Action(() =>
+            {
+                monitorWindow = new Monitor();
+                monitorWindow.Show();
+                monitorWindow.initChart();
+                monitorWindow.setValues(schemaCode);
+                monitorWindow.setChartDefault();
+            }));
+
             await Task.Run(() =>
             {
 
                 serialPort.Open();
+                serialPort.ReadLine();
 
                 while (true)
                 {
@@ -141,15 +157,18 @@ namespace PILOTLOGGER {
                     {
                         try
                         {
-                            string readLine = serialPort.ReadLine();
+                            string readLine = serialPort.ReadLine().Replace("\n", "");
                             string parsedLine = readLine.Replace("\t", ",");
 
                             Console.WriteLine(readLine);
                             OutputQueue.Add(parsedLine);
+                            monitorWindow.modifyContents(parsedLine);
+                            monitorWindow.addValues(parsedLine.Remove(parsedLine.Length - 1));
+
                         }
                         catch
                         {
-                            Console.WriteLine("Thread exited");
+                            Console.WriteLine("Error error error...");
                         }
                     }
                     else
@@ -160,32 +179,6 @@ namespace PILOTLOGGER {
                     }
                 }
             }); 
-        }
-
-        /* Load the output directory and set the label */
-        public void loadOutputDir()
-        {
-            outputBox.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        }
-
-        /* Update schema combobox on selection */
-        private void selectSchema(object sender, RoutedEventArgs e)
-        {
-            schemacombo.SelectedItem = sender;
-            schemacombo.IsDropDownOpen = false;
-        }
-
-        /* Open the output folder */
-        private void openFolder(object sender, RoutedEventArgs e)
-        {
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-        }
-
-        /* Open schema folder and reload files */
-        private void uploadSchema(object sender, RoutedEventArgs e)
-        {
-            Process.Start(Directory.GetCurrentDirectory() + "\\schemas");
-            loadSchemas();
         }
 
         /* CSV File output method */
@@ -203,6 +196,34 @@ namespace PILOTLOGGER {
                     strm.Flush();
                 }
             }
+        }
+
+        /* Load the output directory and set the label */
+        public void loadOutputDir()
+        {
+            outputBox.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        }
+
+        /* Update schema combobox on selection */
+        private void selectSchema(object sender, RoutedEventArgs e)
+        {
+            schemacombo.SelectedItem = sender;
+            schemacombo.IsDropDownOpen = false;
+            schemaCode = File.ReadAllText(Directory.GetCurrentDirectory() + "\\schemas\\" + schemacombo.Text);
+            schemaValueCount = schemaCode.Split(',').Length;
+        }
+
+        /* Open the output folder */
+        private void openFolder(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        }
+
+        /* Open schema folder and reload files */
+        private void uploadSchema(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Directory.GetCurrentDirectory() + "\\schemas");
+            loadSchemas();
         }
 
 
@@ -238,7 +259,7 @@ namespace PILOTLOGGER {
                             }
 
                             //Check selected COM
-                            if (comcombo.SelectedItem != null)
+                            if (comcombo.SelectedItem != null && !isLogging)
                             {
                                 //Check if a schema is selected
                                 if (schemacombo.SelectedItem != null)
