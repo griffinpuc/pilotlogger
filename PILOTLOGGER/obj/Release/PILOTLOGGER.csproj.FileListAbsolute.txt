@@ -64,3 +64,5 @@ C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\PILOTLOGGER.csproj.
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\PILOTLOGGER.csproj.CopyComplete
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\PILOTLOGGER.exe
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\PILOTLOGGER.pdb
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\Monitor.g.cs
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\Monitor.baml

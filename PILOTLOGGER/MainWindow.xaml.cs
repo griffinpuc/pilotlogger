@@ -49,7 +49,7 @@ namespace PILOTLOGGER {
             threads = new Dictionary<string, CancellationTokenSource>();
             userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            //set box with path docs
+            outputBox.Text = userDocumentsPath;
 
             loadSchemas();
             monitorCOM();
@@ -122,6 +122,7 @@ namespace PILOTLOGGER {
             threads.Remove(serialPort.PortName);
 
             isLogging = false;
+            monitorWindow.Close();
             setStatus("Logging completed!");
         }
 
@@ -151,6 +152,8 @@ namespace PILOTLOGGER {
                 serialPort.Open();
                 serialPort.ReadLine();
 
+                int iter = 0;
+
                 while (true)
                 {
                     if (!token.IsCancellationRequested)
@@ -163,8 +166,13 @@ namespace PILOTLOGGER {
                             Console.WriteLine(readLine);
                             OutputQueue.Add(parsedLine);
                             monitorWindow.modifyContents(parsedLine);
-                            monitorWindow.addValues(parsedLine.Remove(parsedLine.Length - 1));
 
+                            //Every x cycles, modiy graph
+                            if ((iter%10) == 0)
+                            {
+                                monitorWindow.addValues(parsedLine.Remove(parsedLine.Length - 1));
+                            }
+                            
                         }
                         catch
                         {
@@ -177,6 +185,8 @@ namespace PILOTLOGGER {
                         outputTask.Wait();
                         break;
                     }
+
+                    iter++;
                 }
             }); 
         }
