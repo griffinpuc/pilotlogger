@@ -68,3 +68,12 @@ C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.csproj.Co
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.csproj.CopyComplete
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.exe
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER.pdb
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\NewSchema.g.cs
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\NewSchema.baml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\Microsoft.Maps.MapControl.WPF.dll
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\Microsoft.Maps.MapControl.WPF.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\AdonisUI.ClassicTheme.dll
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\AdonisUI.dll
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\AdonisUI.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\AdonisUI.ClassicTheme.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\App.baml

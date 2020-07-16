@@ -66,3 +66,12 @@ C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\PILOTLOGGER.exe
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\PILOTLOGGER.pdb
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\Monitor.g.cs
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\Monitor.baml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\AdonisUI.ClassicTheme.dll
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\AdonisUI.dll
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\Microsoft.Maps.MapControl.WPF.dll
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\AdonisUI.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\AdonisUI.ClassicTheme.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\Microsoft.Maps.MapControl.WPF.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\NewSchema.g.cs
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\App.baml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Release\NewSchema.baml

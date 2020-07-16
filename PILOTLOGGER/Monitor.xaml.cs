@@ -1,4 +1,5 @@
-﻿using LiveCharts;
+﻿using AdonisUI;
+using LiveCharts;
 using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace PILOTLOGGER
 
     public partial class Monitor : Window
     {
-
+        // Disable close button
+        //Variables for disallowing x in corner
         [DllImport("user32.dll")]
         static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
         [DllImport("user32.dll")]
@@ -24,7 +26,6 @@ namespace PILOTLOGGER
         {
             base.OnSourceInitialized(e);
 
-            // Disable close button
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
             IntPtr hMenu = GetSystemMenu(hwnd, false);
             if (hMenu != IntPtr.Zero)
@@ -32,6 +33,7 @@ namespace PILOTLOGGER
                 EnableMenuItem(hMenu, SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
             }
         }
+        //End of that block
 
 
         private List<string> schemaCodeList;
@@ -40,6 +42,8 @@ namespace PILOTLOGGER
 
         public Monitor()
         {
+            AdonisUI.ResourceLocator.SetColorScheme(Application.Current.Resources, ResourceLocator.DarkColorScheme);
+
             InitializeComponent();
 
             schemaCodeList = new List<string>();
@@ -47,6 +51,7 @@ namespace PILOTLOGGER
 
         }
 
+        /* Initialize the graph and set properties */
         public void initChart()
         {
             chartSeries = new SeriesCollection();
@@ -55,6 +60,7 @@ namespace PILOTLOGGER
             chart.DisableAnimations = true;
         }
 
+        /* Initialize line series from schema values */
         public void setValues(string schemaCode)
         {
             int index = 0;
@@ -65,6 +71,7 @@ namespace PILOTLOGGER
             {
                 schemaCodeList.Add(code);
 
+                //New line series for every value
                 LineSeries newSeries = new LineSeries();
                 newSeries.Name = code;
                 newSeries.Values = new ChartValues<double>() { 0 };
@@ -72,6 +79,7 @@ namespace PILOTLOGGER
 
                 serialValues[index] = newSeries;
 
+                //Add to combobox dropdown for user selection
                 Dispatcher.Invoke(new Action(() =>
                 {
                     MenuItem item = new MenuItem { Header = code };
@@ -83,19 +91,22 @@ namespace PILOTLOGGER
             }
         }
 
+        /* Modify contents of test label - may be removed */
         public void modifyContents(string labelText)
         {
             Dispatcher.Invoke(new Action(() =>
             {
-                testlabel.Content = labelText.Replace(",", "\n");
+                testlabel.Content = labelText;
             }));
         }
 
+        /* Set chart to graph the first value by default */
         public void setChartDefault()
         {
             chartSeries.Add(serialValues[0]);
         }
 
+        /* Modify which value is graphed from combobox */
         public void setGraphValue(object sender, RoutedEventArgs e)
         {
             Dispatcher.Invoke(new Action(() =>
@@ -107,17 +118,11 @@ namespace PILOTLOGGER
             }));
         }
 
-        private void selectValue(object sender, RoutedEventArgs e)
-        {
-            graphcombo.SelectedItem = sender;
-            graphcombo.IsDropDownOpen = false;
-        }
-
+        /* Send serial port data string and add to graph line series */
         public void addValues(string values)
         {
-            int x = values.Split(',').Length;
-            int y = serialValues.Length;
 
+            //Check to make sure data lines up, discards broken lines
             if (values.Split(',').Length == serialValues.Length)
             {
                 int index = 0;
@@ -126,6 +131,7 @@ namespace PILOTLOGGER
                     IChartValues chartValues = serialValues[index].Values;
                     chartValues.Add(double.Parse(value));
 
+                    //Modifys chart to only graph x values at a time (simulate real time graphing)
                     if (chartValues.Count > 100)
                     {
                         chartValues.RemoveAt(0);
@@ -134,6 +140,7 @@ namespace PILOTLOGGER
                     index++;
                 }
 
+                //Update chart every cycle to reflect new changes
                 Dispatcher.Invoke(new Action(() =>
                 {
                     chart.Series = chartSeries;

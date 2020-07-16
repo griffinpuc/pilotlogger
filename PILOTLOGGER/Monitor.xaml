@@ -5,11 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PILOTLOGGER"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         mc:Ignorable="d"
-        Title="Monitor" Height="450" Width="800">
-    <Grid>
-        <Label x:Name="testlabel" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.335,0.2"/>
-        <lvc:CartesianChart x:Name="chart" Series="{Binding SeriesCollection}" Margin="10,191,10.2,-14.2" />
-        <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" Width="120"/>
-    </Grid>
+        Title="Monitor" Height="622" Width="1352">
+    <GroupBox Header="Live Monitor">
+        <Grid>
+            <Label x:Name="testlabel" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.335,0.2"/>
+            <lvc:CartesianChart x:Name="chart" Series="{Binding SeriesCollection}" Margin="10,156,10,-14" />
+            <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.617,-0.333"/>
+        </Grid>
+    </GroupBox>
+
 </Window>

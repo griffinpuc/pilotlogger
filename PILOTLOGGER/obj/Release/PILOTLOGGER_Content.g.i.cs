@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("drone-free-icon-of-technology-1-drone-icon-png-512_512.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("droneicon.ico")]
 
 

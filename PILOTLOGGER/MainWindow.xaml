@@ -7,24 +7,22 @@
         mc:Ignorable="d"
         Title="PILOT LOGGER" Height="480.6" Width="415.6">
     <Grid Margin="0,0,-13.6,-17">
-        <GroupBox Header="Settings" HorizontalAlignment="Left" Height="206" Margin="10,84,0,0" VerticalAlignment="Top" Width="385">
+        <GroupBox Header="PILOT Logger" HorizontalAlignment="Left" Height="462" VerticalAlignment="Top" Width="416">
             <Grid>
-                <Button Click="uploadSchema" Content="Upload Schema" HorizontalAlignment="Left" Margin="265,30,0,0" VerticalAlignment="Top" Width="98"/>
-                <ComboBox x:Name="schemacombo" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top" Width="226"/>
-                <TextBox x:Name="outputBox" HorizontalAlignment="Left" Height="23" Margin="20,86,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226" IsEnabled="False"/>
-                <Button Click="openFolder" Content="Open Folder" HorizontalAlignment="Left" Margin="265,86,0,0" VerticalAlignment="Top" Width="98"/>
-                <Label Content="Serial Data Schema" HorizontalAlignment="Left" Margin="134,6,0,0" VerticalAlignment="Top"/>
-                <Label Content="Log Output Directory" HorizontalAlignment="Left" Margin="124,60,0,0" VerticalAlignment="Top"/>
-                <Label Content="COM Port" HorizontalAlignment="Left" Margin="153,119,0,0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="comcombo" HorizontalAlignment="Left" Margin="70,151,0,0" VerticalAlignment="Top" Width="226"/>
-                <Button x:Name="startBut" Click="startComMonitor" Content="Start Logging" HorizontalAlignment="Left" Margin="20,243,0,-129.8" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
-                <Button x:Name="stopBut" Click="endComMonitor" Content="Stop Logging" HorizontalAlignment="Left" Margin="199,243,0,-129.8" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
-                <Label Content="STATUS:" HorizontalAlignment="Left" Margin="124,212,0,-54.8" VerticalAlignment="Top" Width="55" FontWeight="Bold"/>
-                <Label x:Name="statusLabel" Content="NOT CONNECTED" HorizontalAlignment="Left" Margin="184,212,0,-54.8" VerticalAlignment="Top" Width="146"/>
+                <Button Click="uploadSchema" Content="Add New" HorizontalAlignment="Left" Margin="265,71,0,0" VerticalAlignment="Top" Width="98"/>
+                <ComboBox x:Name="schemacombo" HorizontalAlignment="Left" Margin="20,71,0,0" VerticalAlignment="Top" Width="226"/>
+                <TextBox x:Name="outputBox" HorizontalAlignment="Left" Height="23" Margin="20,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226" IsEnabled="False"/>
+                <Button Click="openFolder" Content="Open Folder" HorizontalAlignment="Left" Margin="265,144,0,0" VerticalAlignment="Top" Width="98"/>
+                <Label Content="Serial Data Schema" HorizontalAlignment="Left" Margin="134,47,0,0" VerticalAlignment="Top"/>
+                <Label Content="Log Output Directory" HorizontalAlignment="Left" Margin="124,118,0,0" VerticalAlignment="Top"/>
+                <Label Content="COM Port" HorizontalAlignment="Left" Margin="164,191,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.564,2.938"/>
+                <ComboBox x:Name="comcombo" HorizontalAlignment="Left" Margin="85,221,0,0" VerticalAlignment="Top" Width="226"/>
+                <Button x:Name="startBut" Click="startComMonitor" Content="Start Logging" HorizontalAlignment="Left" Margin="10,324,0,0" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
+                <Button x:Name="stopBut" Click="endComMonitor" Content="Stop Logging" HorizontalAlignment="Left" Margin="241,324,0,0" VerticalAlignment="Top" Width="149" Height="70" IsEnabled="False"/>
+                <Label Content="STATUS:" HorizontalAlignment="Left" Margin="116,283,0,0" VerticalAlignment="Top" Width="55" FontWeight="Bold"/>
+                <Label x:Name="statusLabel" Content="NOT CONNECTED" HorizontalAlignment="Left" Margin="176,283,0,0" VerticalAlignment="Top" Width="146"/>
             </Grid>
         </GroupBox>
-        <Image HorizontalAlignment="Left" Height="51" Margin="34,10,0,0" VerticalAlignment="Top" Width="66" Source="drone.png"/>
-        <Label Content="PILOT LOGGER" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="291" Height="59" FontSize="36" FontWeight="Bold" FontFamily="Segoe UI Black"/>
 
     </Grid>
 </Window>
