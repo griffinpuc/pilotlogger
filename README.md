@@ -1,6 +1,7 @@
-# PILOT Logger v0.1.0
+# PILOT Logger v0.2.1
 
 This is a Windows application designed to run with the PILOT RC wireless drone control hardware. The log tool provides automatic csv logging capabilities and real-time serial port monitoring.
+![Logger Demo](images/graphexample.gif)
 
 ## Download and Install
 
