@@ -7,7 +7,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         mc:Ignorable="d"
-        Title="Monitor" Height="622" Width="1352">
+        Title="Monitor" Height="622" Width="1352" Background="#FF2C2C2C">
     <GroupBox Header="Live Monitor">
         <Grid>
             <Label x:Name="testlabel" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.335,0.2"/>

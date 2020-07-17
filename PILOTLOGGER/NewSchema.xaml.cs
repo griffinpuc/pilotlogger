@@ -1,5 +1,6 @@
 ﻿using AdonisUI;
 using System.IO;
+using System.Security.Permissions;
 using System.Windows;
 
 namespace PILOTLOGGER

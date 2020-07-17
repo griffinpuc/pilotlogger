@@ -1,0 +1,16 @@
+﻿<Window x:Class="PILOTLOGGER.LaunchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PILOTLOGGER"
+        mc:Ignorable="d"
+        Title="LaunchWindow" Height="190.426" Width="425.18" Background="#FF2C2C2C" ResizeMode="NoResize">
+    <Grid>
+        <Button Content="Launch Base Station" HorizontalAlignment="Left" Margin="214,71,0,0" VerticalAlignment="Top" Width="189" Height="50" Click="Button_Click_1"/>
+        <Button Content="Launch Flight Planner" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="189" Height="50" Click="Button_Click"/>
+        <Label Content="Copyright © 2020 Schindler Electronics&#xD;&#xA;" HorizontalAlignment="Left" Margin="96,131,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.144,2.991" Width="229" Background="#FF2C2C2C" Foreground="White"/>
+        <Image HorizontalAlignment="Left" Height="68" Margin="96,-2,-36,0" VerticalAlignment="Top" Width="351" Source="PILOTLOGO.png"/>
+
+    </Grid>
+</Window>

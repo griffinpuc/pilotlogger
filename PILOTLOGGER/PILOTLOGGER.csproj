@@ -52,6 +52,12 @@
   <PropertyGroup>
     <ApplicationIcon>droneicon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AdonisUI, Version=1.16.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AdonisUI.1.16.0\lib\net45\AdonisUI.dll</HintPath>
@@ -97,7 +103,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="LogBox.xaml">
+    <Page Include="FlightPlanBuilder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LaunchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -109,8 +119,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LogBox.xaml.cs">
-      <DependentUpon>LogBox.xaml</DependentUpon>
+    <Compile Include="FlightPlan.cs" />
+    <Compile Include="FlightPlanBuilder.xaml.cs">
+      <DependentUpon>FlightPlanBuilder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LaunchWindow.xaml.cs">
+      <DependentUpon>LaunchWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -176,6 +190,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="droneicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PILOTLOGO.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

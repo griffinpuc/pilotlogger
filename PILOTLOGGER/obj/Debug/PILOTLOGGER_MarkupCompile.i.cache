@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\App.xaml
-41005225220
+5460885234
 
-9575299693
+112041240582
 21710660761
-LogBox.xaml;MainWindow.xaml;Monitor.xaml;NewSchema.xaml;
+FlightPlanBuilder.xaml;LaunchWindow.xaml;MainWindow.xaml;Monitor.xaml;NewSchema.xaml;
 
-True
+False
 

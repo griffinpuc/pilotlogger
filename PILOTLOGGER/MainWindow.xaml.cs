@@ -56,6 +56,12 @@ namespace PILOTLOGGER {
             Application.Current.Shutdown();
         }
 
+        private void launchFlightPlanner()
+        {
+            FlightPlanBuilder f = new FlightPlanBuilder();
+            f.Show();
+        }
+
         /* Application startup tasks */
         private void applicationStartup()
         {
@@ -169,7 +175,7 @@ namespace PILOTLOGGER {
                             monitorWindow.modifyContents(parsedLine);
 
                             //Every x cycles, modiy graph
-                            if ((iter%10) == 0)
+                            if ((iter%20) == 0)
                             {
                                 monitorWindow.addValues(parsedLine.Remove(parsedLine.Length - 1));
                             }
@@ -221,7 +227,7 @@ namespace PILOTLOGGER {
         {
             schemacombo.SelectedItem = sender;
             schemacombo.IsDropDownOpen = false;
-            schemaCode = File.ReadAllText(Directory.GetCurrentDirectory() + "\\schemas\\" + schemacombo.Text);
+            schemaCode = File.ReadAllText(userDocumentsPath + "\\pilotrc\\schemas\\" + schemacombo.Text);
             schemaValueCount = schemaCode.Split(',').Length;
         }
 
@@ -234,7 +240,7 @@ namespace PILOTLOGGER {
         /* Open schema folder and reload files */
         private void uploadSchema(object sender, RoutedEventArgs e)
         {
-            NewSchema newSchemaWindow = new NewSchema(Directory.GetCurrentDirectory() + "\\schemas\\");
+            NewSchema newSchemaWindow = new NewSchema(userDocumentsPath + "\\pilotrc\\schemas\\");
             newSchemaWindow.Show();
         }
 

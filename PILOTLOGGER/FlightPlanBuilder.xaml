@@ -1,0 +1,32 @@
+﻿<Window x:Class="PILOTLOGGER.FlightPlanBuilder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PILOTLOGGER"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        mc:Ignorable="d"
+        Title="FlightPlanBuilder" Height="683" Width="1046.6" Background="#FF2C2C2C">
+    <Grid>
+        <GroupBox Header="Save Plan" Margin="10,10,808.6,537">
+            <Grid>
+                <TextBox x:Name="fileName" HorizontalAlignment="Left" Height="23" Margin="10,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <Button x:Name="createfile" Content="Save File" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="saveMapFile" Margin="10,33,0,0"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Flight Builder Tools" Margin="238,10,9.6,537">
+            <Label Content="Label" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+        </GroupBox>
+        <GroupBox Header="Flight Plan" Margin="238,124,10,199">
+            <m:Map x:Name="MainMap" CredentialsProvider="Am8fO-_nP0e8k7HcIDnOG7JzvbNlc2rMdGYmF3-5Yp0WfgyVqz7MevsWFcq4ze3k" Mode="Aerial" Margin="0,0,0,-2">
+            </m:Map>
+        </GroupBox>
+        <GroupBox Header="Flight Points" Margin="10,124,810,199">
+            <ListBox x:Name="markerListBox" HorizontalAlignment="Left" Height="370" Margin="10,0,0,0" VerticalAlignment="Top" Width="185"/>
+        </GroupBox>
+        <GroupBox Header="Altitude" Margin="10,463,10,10">
+            <lvc:CartesianChart x:Name="altChart" Series="{Binding SeriesCollection}" Margin="0,0,-6,-6" />
+        </GroupBox>
+    </Grid>
+</Window>
