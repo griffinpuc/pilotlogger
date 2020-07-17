@@ -7,13 +7,38 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         mc:Ignorable="d"
-        Title="Monitor" Height="622" Width="1352" Background="#FF2C2C2C">
-    <GroupBox Header="Live Monitor">
-        <Grid>
-            <Label x:Name="testlabel" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.335,0.2"/>
-            <lvc:CartesianChart x:Name="chart" Series="{Binding SeriesCollection}" Margin="10,156,10,-14" />
-            <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.617,-0.333"/>
-        </Grid>
-    </GroupBox>
+        Title="Monitor" Height="1242" Width="2132" Background="#FF2C2C2C" WindowState="Maximized" WindowStyle="SingleBorderWindow">
 
+    <Viewbox>
+        <Grid Margin="10,10,-4,32" Height="919" Width="1615">
+
+            <GroupBox Header="Telemetric Data" Margin="0,111,1250,267">
+                <Grid>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Live GPS Monitoring" Margin="370,111,10,267">
+                <Grid>
+                    <m:Map x:Name="MainMap" CredentialsProvider="Am8fO-_nP0e8k7HcIDnOG7JzvbNlc2rMdGYmF3-5Yp0WfgyVqz7MevsWFcq4ze3k" Mode="Aerial" Margin="0,0,0,-2">
+                    </m:Map>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Flightplan Altitude Monitor" Margin="0,657,822,0">
+                <Grid>
+                    <lvc:CartesianChart x:Name="altchart" Series="{Binding altPoints}" Margin="10,29,10,10" />
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Live Monitor" Margin="798,657,10,0">
+                <Grid>
+                    <lvc:CartesianChart x:Name="chart" Series="{Binding chartSeries}" Margin="10,29,10,10" />
+                    <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.617,-0.333"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Telemetric Data" Margin="0,10,10,813">
+                <Grid/>
+            </GroupBox>
+        </Grid>
+    </Viewbox>
 </Window>

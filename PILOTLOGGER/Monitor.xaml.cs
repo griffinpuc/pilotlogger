@@ -1,8 +1,10 @@
 ﻿using AdonisUI;
 using LiveCharts;
 using LiveCharts.Wpf;
+using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,6 +40,8 @@ namespace PILOTLOGGER
 
         private List<string> schemaCodeList;
         private LineSeries[] serialValues;
+        private LineSeries altitudeSeries;
+        public SeriesCollection altchartSeries;
         public SeriesCollection chartSeries;
 
         public Monitor()
@@ -49,7 +53,32 @@ namespace PILOTLOGGER
             schemaCodeList = new List<string>();
             serialValues = new LineSeries[schemaCodeList.Count];
 
+            initMap();
+            initAltChart();
+
+            FlightPlan plan = parseFlightplan("mountains.flight");
+            drawFlightPlan(plan);
+
         }
+
+        /* Initialize default map properties */
+        private void initMap()
+        {
+            MainMap.Mode = new RoadMode();
+            MainMap.Focus();
+            MainMap.Center = new Location(34.0522, -118.2437);
+            MainMap.ZoomLevel = 10;
+        }
+
+        private void initAltChart()
+        {
+            altchartSeries = new SeriesCollection();
+            altchart.ChartLegend.Visibility = Visibility.Visible;
+            altitudeSeries = new LineSeries();
+            altitudeSeries.Values = new ChartValues<double>() { 0 };
+            altchartSeries.Add(altitudeSeries);
+        }
+
 
         /* Initialize the graph and set properties */
         public void initChart()
@@ -96,7 +125,7 @@ namespace PILOTLOGGER
         {
             Dispatcher.Invoke(new Action(() =>
             {
-                testlabel.Content = labelText;
+                //testlabel.Content = labelText;
             }));
         }
 
@@ -148,6 +177,60 @@ namespace PILOTLOGGER
             }
 
             Console.WriteLine();
+        }
+
+        /* Parse flightplan file into object */
+        private FlightPlan parseFlightplan(string fileName)
+        {
+            string schemaCode = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\pilotrc\\flightplans\\" + fileName);
+            string parsedCode = schemaCode.Remove(schemaCode.Length - 2).Replace("\n", "");
+
+            FlightPlan loadedPlan = new FlightPlan();
+            loadedPlan.locationMarkers = new List<LocationMarker>();
+
+            foreach (string line in parsedCode.Split('!'))
+            {
+                string[] dataPoints = line.Split(',');
+                LocationMarker newMarker = new LocationMarker();
+                newMarker.markerID = Convert.ToInt32(dataPoints[0]);
+                newMarker.latitude = double.Parse(dataPoints[1]);
+                newMarker.longitude = double.Parse(dataPoints[2]);
+                newMarker.altitude = double.Parse(dataPoints[3]);
+                newMarker.location = new Location(newMarker.latitude, newMarker.longitude);
+
+                loadedPlan.locationMarkers.Add(newMarker);
+            }
+
+            return loadedPlan;
+
+        }
+
+        /* Draw flightplan on map */
+        private void drawFlightPlan(FlightPlan flightPlan)
+        {
+            int markerCount = 0;
+            foreach(LocationMarker marker in flightPlan.locationMarkers)
+            {
+                Pushpin pin = new Pushpin();
+                pin.Location = marker.location;
+                MainMap.Children.Add(pin);
+
+                if (markerCount > 1)
+                {
+                    MapPolyline polygon = new MapPolyline();
+                    polygon.Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+                    polygon.StrokeThickness = 3;
+                    polygon.Opacity = 0.7;
+                    polygon.Locations = new LocationCollection() { marker.location, flightPlan.locationMarkers[markerCount - 1].location };
+
+                    MainMap.Children.Add(polygon);
+                }
+
+                altitudeSeries.Values.Add(marker.altitude);
+                altchart.Series = altchartSeries;
+
+                markerCount++;
+            }
         }
 
     }

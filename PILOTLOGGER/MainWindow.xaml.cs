@@ -312,7 +312,7 @@ namespace PILOTLOGGER {
                     Dispatcher.Invoke(new Action(() =>
                     {
 
-                        string[] schemaFiles = Directory.GetFiles(workingDirectory + "\\schemas");
+                        string[] schemaFiles = Directory.GetFiles(userDocumentsPath + "\\pilotrc\\schemas\\");
 
                         //Check for new schemas
                         foreach (string schema in schemaFiles)

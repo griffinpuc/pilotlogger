@@ -163,7 +163,7 @@ namespace PILOTLOGGER
             string file = "";
             foreach (LocationMarker marker in this.newPlan.locationMarkers)
             {
-                file += marker.markerID+","+marker.latitude+","+marker.longitude+","+marker.altitude+"\n";
+                file += marker.markerID+","+marker.latitude+","+marker.longitude+","+marker.altitude+"!\n";
             }
 
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\pilotrc\\flightplans\\" +fileName.Text + ".flight", file);
