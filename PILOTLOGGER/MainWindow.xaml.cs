@@ -32,6 +32,7 @@ namespace PILOTLOGGER {
         string workingDirectory;
         string userDocumentsPath;
         string schemaCode;
+        string baseDirectory;
         int schemaValueCount;
         bool isLogging;
         List<string> schemaNames = new List<string>();
@@ -56,18 +57,13 @@ namespace PILOTLOGGER {
             Application.Current.Shutdown();
         }
 
-        private void launchFlightPlanner()
-        {
-            FlightPlanBuilder f = new FlightPlanBuilder();
-            f.Show();
-        }
-
         /* Application startup tasks */
         private void applicationStartup()
         {
             workingDirectory = Directory.GetCurrentDirectory();
             threads = new Dictionary<string, CancellationTokenSource>();
             userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC";
 
             outputBox.Text = userDocumentsPath;
 
@@ -202,7 +198,7 @@ namespace PILOTLOGGER {
         /* CSV File output method */
         private void writeFile(string fileName)
         {
-            using (var strm = File.AppendText(Path.Combine(userDocumentsPath, fileName)))
+            using (var strm = File.AppendText(baseDirectory + "\\logs\\" + fileName))
             {
                 //Write schema code to first line for CSV
                 strm.WriteLine(schemaCode);
@@ -227,7 +223,7 @@ namespace PILOTLOGGER {
         {
             schemacombo.SelectedItem = sender;
             schemacombo.IsDropDownOpen = false;
-            schemaCode = File.ReadAllText(userDocumentsPath + "\\pilotrc\\schemas\\" + schemacombo.Text);
+            schemaCode = File.ReadAllText(baseDirectory + "\\schemas\\" + schemacombo.Text);
             schemaValueCount = schemaCode.Split(',').Length;
         }
 
@@ -240,7 +236,7 @@ namespace PILOTLOGGER {
         /* Open schema folder and reload files */
         private void uploadSchema(object sender, RoutedEventArgs e)
         {
-            NewSchema newSchemaWindow = new NewSchema(userDocumentsPath + "\\pilotrc\\schemas\\");
+            NewSchema newSchemaWindow = new NewSchema(baseDirectory + "\\schemas\\");
             newSchemaWindow.Show();
         }
 
@@ -312,7 +308,7 @@ namespace PILOTLOGGER {
                     Dispatcher.Invoke(new Action(() =>
                     {
 
-                        string[] schemaFiles = Directory.GetFiles(userDocumentsPath + "\\pilotrc\\schemas\\");
+                        string[] schemaFiles = Directory.GetFiles(baseDirectory + "\\schemas\\");
 
                         //Check for new schemas
                         foreach (string schema in schemaFiles)

@@ -43,6 +43,7 @@ namespace PILOTLOGGER
         private LineSeries altitudeSeries;
         public SeriesCollection altchartSeries;
         public SeriesCollection chartSeries;
+        public string baseDirectory;
 
         public Monitor()
         {
@@ -52,6 +53,7 @@ namespace PILOTLOGGER
 
             schemaCodeList = new List<string>();
             serialValues = new LineSeries[schemaCodeList.Count];
+            baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC";
 
             initMap();
             initAltChart();
@@ -70,6 +72,7 @@ namespace PILOTLOGGER
             MainMap.ZoomLevel = 10;
         }
 
+        /* Initialize the altitude graph */
         private void initAltChart()
         {
             altchartSeries = new SeriesCollection();
@@ -182,7 +185,7 @@ namespace PILOTLOGGER
         /* Parse flightplan file into object */
         private FlightPlan parseFlightplan(string fileName)
         {
-            string schemaCode = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\pilotrc\\flightplans\\" + fileName);
+            string schemaCode = File.ReadAllText(baseDirectory + "\\flightplans\\" + fileName);
             string parsedCode = schemaCode.Remove(schemaCode.Length - 2).Replace("\n", "");
 
             FlightPlan loadedPlan = new FlightPlan();
@@ -232,6 +235,8 @@ namespace PILOTLOGGER
                 markerCount++;
             }
         }
+
+        /*  */
 
     }
 }

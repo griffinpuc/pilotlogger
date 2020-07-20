@@ -6,21 +6,60 @@
         xmlns:local="clr-namespace:PILOTLOGGER"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+            xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
         mc:Ignorable="d"
         Title="Monitor" Height="1242" Width="2132" Background="#FF2C2C2C" WindowState="Maximized" WindowStyle="SingleBorderWindow">
 
     <Viewbox>
         <Grid Margin="10,10,-4,32" Height="919" Width="1615">
 
-            <GroupBox Header="Telemetric Data" Margin="0,111,1250,267">
+            <GroupBox Header="Telemetric Data" Margin="0,10,1250,542">
                 <Grid>
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="Live GPS Monitoring" Margin="370,111,10,267">
+            <GroupBox Header="Velocity" Margin="0,382,1250,267">
                 <Grid>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" 
+                    Height="190" Width="190" StrokeThickness="15"      
+                    StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                        <ed:Arc StartAngle="-120" EndAngle="-35" Stretch="None" 
+                    Height="190" Width="190" StrokeThickness="15"
+                    StrokeDashArray=".25" Stroke="Turquoise" />
+                    </Grid>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="km/h" Foreground="#FF878A9F" HorizontalAlignment="Center"
+                        FontSize="14"/>
+                        <TextBlock x:Name="speedVal" Text="43" Foreground="White" HorizontalAlignment="Center"
+                        FontSize="90" FontWeight="Light"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Live GPS Monitoring" Margin="370,10,10,267">
+                <Grid>
+                    <Ellipse HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" StrokeThickness="10" Width="225" Margin="498,375,0,-2" Fill="Black" Panel.ZIndex="5"/>
+                    <Border Height="200" Width="200" CornerRadius="150" Panel.ZIndex="5" Margin="510,386,509,8">
+                        <Grid>
+                            <Image Source="TopBottomLayer.png"/>
+                            <Image Source="RollLayer.png"/>
+                            <Image Source="RollLayer.png"/>
+                        </Grid>
+
+                        <Border.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="skyground.png" />
+                        </Border.Background>
+                    </Border>
                     <m:Map x:Name="MainMap" CredentialsProvider="Am8fO-_nP0e8k7HcIDnOG7JzvbNlc2rMdGYmF3-5Yp0WfgyVqz7MevsWFcq4ze3k" Mode="Aerial" Margin="0,0,0,-2">
+
                     </m:Map>
+                    <GroupBox Header="Telemetric Data" HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="1103" Margin="62,417,0,0" Opacity="0.97" Background="#CC1F1F1F">
+                        <Grid>
+
+                        </Grid>
+                    </GroupBox>
+
                 </Grid>
             </GroupBox>
 
@@ -35,9 +74,6 @@
                     <lvc:CartesianChart x:Name="chart" Series="{Binding chartSeries}" Margin="10,29,10,10" />
                     <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.617,-0.333"/>
                 </Grid>
-            </GroupBox>
-            <GroupBox Header="Telemetric Data" Margin="0,10,10,813">
-                <Grid/>
             </GroupBox>
         </Grid>
     </Viewbox>

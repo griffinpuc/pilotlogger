@@ -79,3 +79,6 @@ C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\FlightPlanBuilder.g.c
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\FlightPlanBuilder.baml
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\LaunchWindow.g.cs
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\LaunchWindow.baml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\Microsoft.Expression.Drawing.dll
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Debug\Microsoft.Expression.Drawing.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\obj\Debug\PILOTLOGGER_Content.g.cs
