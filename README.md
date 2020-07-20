@@ -24,10 +24,15 @@ By default, the application will write output into your user Documents folder.
 
 ## Hardware and More Information
 
-PILOT RC Firmware:
+#### PILOT RC Firmware:
 * [Repo Link](https://github.com/mschindler301/TX250)
 
-More information on hardware and other products:
+#### More information on hardware and other products:
 * [PILOT RC Specifications](https://www.schindlerelectronics.com/specs)
 * [Other Downloads](https://www.schindlerelectronics.com/downloads)
 * [PILOT RC Tutorials](https://www.schindlerelectronics.com/getting-started)
+
+#### Collaborators
+
+* [Griffin Puc](https://github.com/griffinpuc), basestation software developer
+* [Matthew Schindler](https://github.com/mschindler301), firmware author and field testing
