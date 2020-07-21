@@ -20,45 +20,63 @@
 
             <GroupBox Header="Velocity" Margin="0,382,1250,267">
                 <Grid>
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" 
-                    Height="190" Width="190" StrokeThickness="15"      
-                    StrokeDashArray=".25" Stroke="#FF484D5F"/>
-                        <ed:Arc StartAngle="-120" EndAngle="-35" Stretch="None" 
-                    Height="190" Width="190" StrokeThickness="15"
-                    StrokeDashArray=".25" Stroke="Turquoise" />
-                    </Grid>
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="km/h" Foreground="#FF878A9F" HorizontalAlignment="Center"
-                        FontSize="14"/>
-                        <TextBlock x:Name="speedVal" Text="43" Foreground="White" HorizontalAlignment="Center"
-                        FontSize="90" FontWeight="Light"/>
-                    </StackPanel>
+
                 </Grid>
             </GroupBox>
 
             <GroupBox Header="Live GPS Monitoring" Margin="370,10,10,267">
                 <Grid>
-                    <Ellipse HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" StrokeThickness="10" Width="225" Margin="498,375,0,-2" Fill="Black" Panel.ZIndex="5"/>
-                    <Border Height="200" Width="200" CornerRadius="150" Panel.ZIndex="5" Margin="510,386,509,8">
-                        <Grid>
-                            <Image Source="TopBottomLayer.png"/>
-                            <Image Source="RollLayer.png"/>
-                            <Image Source="RollLayer.png"/>
-                        </Grid>
 
-                        <Border.Background>
-                            <ImageBrush Stretch="Uniform" ImageSource="skyground.png" />
-                        </Border.Background>
-                    </Border>
                     <m:Map x:Name="MainMap" CredentialsProvider="Am8fO-_nP0e8k7HcIDnOG7JzvbNlc2rMdGYmF3-5Yp0WfgyVqz7MevsWFcq4ze3k" Mode="Aerial" Margin="0,0,0,-2">
 
                     </m:Map>
-                    <GroupBox Header="Telemetric Data" HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="1103" Margin="62,417,0,0" Opacity="0.97" Background="#CC1F1F1F">
+                    <GroupBox Header="Telemetric Data" HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="1103" Margin="62,417,0,0" Opacity="0.97" Background="#E51F1F1F">
                         <Grid>
+                            <Label Content="Positional Metrics" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="LATITUDE: " HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="LONGITUDE:" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="ALTITUDE:" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="Alignment Metrics" HorizontalAlignment="Left" Margin="191,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="ROLL:" HorizontalAlignment="Left" Margin="191,31,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="PITCH:" HorizontalAlignment="Left" Margin="191,47,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Label Content="YAW:" HorizontalAlignment="Left" Margin="191,63,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                            <Grid Margin="335,0,612,0">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                                    <ed:Arc StartAngle="-120" EndAngle="{Binding Path=VelocityCurve}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
+                                </Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="mph" Foreground="#FF878A9F" HorizontalAlignment="Center" FontSize="10"/>
+                                    <TextBlock x:Name="speedval" Text="{Binding Path=Velocity}" Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="501,0,446,0">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                                    <ed:Arc StartAngle="-120" EndAngle="{Binding Path=AccelerationCurve}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
+                                </Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Foreground="#FF878A9F" HorizontalAlignment="Center" FontSize="10">m/s<Run BaselineAlignment="Superscript">2</Run></TextBlock>
+                                    <TextBlock x:Name="accelval" Text="{Binding Path=Acceleration}"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="663,0,284,0">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                                    <ed:Arc StartAngle="-120" EndAngle="{Binding Path=AltitudeCurve}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
+                                </Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="meters" Foreground="#FF878A9F" HorizontalAlignment="Center" FontSize="10"/>
+                                    <TextBlock x:Name="altitudeval" Text="{Binding Path=Altitude}"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                                </StackPanel>
+                            </Grid>
+                            <Label Content="VELOCITY" HorizontalAlignment="Left" Margin="379,105,0,0" VerticalAlignment="Top"/>
+                            <Label Content="ACCELERATION" HorizontalAlignment="Left" Margin="529,105,0,0" VerticalAlignment="Top"/>
+                            <Label Content="ALTITUDE" HorizontalAlignment="Left" Margin="706,105,0,0" VerticalAlignment="Top"/>
 
                         </Grid>
                     </GroupBox>
+
 
                 </Grid>
             </GroupBox>

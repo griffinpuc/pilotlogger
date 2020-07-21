@@ -171,9 +171,10 @@ namespace PILOTLOGGER {
                             monitorWindow.modifyContents(parsedLine);
 
                             //Every x cycles, modiy graph
-                            if ((iter%20) == 0)
+                            if ((iter%10) == 0)
                             {
                                 monitorWindow.addValues(parsedLine.Remove(parsedLine.Length - 1));
+                                setLabels(parsedLine.Remove(parsedLine.Length - 1));
                             }
                             
                         }
@@ -341,6 +342,34 @@ namespace PILOTLOGGER {
                 statusLabel.Content = (status);
 
             }));
+        }
+
+        private void setLabels(string serialInput)
+        {
+            double velocity = 0;
+            double acceleration = 0;
+            double altitude = 0;
+
+            string[] codes = schemaCode.Split(',');
+            string[] inputVals = serialInput.Split(',');
+
+            for (int i=0; i<codes.Length; i++)
+            {
+                if (codes[i] == ("velocity"))
+                {
+                    velocity = double.Parse(inputVals[i]);
+                }
+                else if (codes[i] == ("acceleration"))
+                {
+                    acceleration = double.Parse(inputVals[i]);
+                }
+                else if (codes[i] == ("altitude"))
+                {
+                    altitude = double.Parse(inputVals[i]);
+                }
+            }
+
+            monitorWindow.modifyValues(velocity, acceleration, altitude);
         }
     }
 }

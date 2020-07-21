@@ -4,7 +4,9 @@ using LiveCharts.Wpf;
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +15,7 @@ using System.Windows.Interop;
 namespace PILOTLOGGER
 {
 
-    public partial class Monitor : Window
+    public partial class Monitor : Window, INotifyPropertyChanged
     {
         // Disable close button
         //Variables for disallowing x in corner
@@ -45,11 +47,13 @@ namespace PILOTLOGGER
         public SeriesCollection chartSeries;
         public string baseDirectory;
 
+
         public Monitor()
         {
             AdonisUI.ResourceLocator.SetColorScheme(Application.Current.Resources, ResourceLocator.DarkColorScheme);
 
             InitializeComponent();
+            DataContext = this;
 
             schemaCodeList = new List<string>();
             serialValues = new LineSeries[schemaCodeList.Count];
@@ -62,6 +66,88 @@ namespace PILOTLOGGER
             drawFlightPlan(plan);
 
         }
+
+        /* Live binded variables */
+        private double _Velocity = 0;
+        public double Velocity
+        {
+            get { return _Velocity; }
+            set
+            {
+                _Velocity = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _Acceleration = 0;
+        public double Acceleration
+        {
+            get { return _Acceleration; }
+            set
+            {
+                _Acceleration = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _Altitude = 0;
+        public double Altitude
+        {
+            get { return _Altitude; }
+            set
+            {
+                _Altitude = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _AltitudeCurve = -120;
+        public int AltitudeCurve
+        {
+            get { return _AltitudeCurve; }
+            set
+            {
+                _AltitudeCurve = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _VelocityCurve = -120;
+        public int VelocityCurve
+        {
+            get { return _VelocityCurve; }
+            set
+            {
+                _VelocityCurve = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _AccelerationCurve = -120;
+        public double AccelerationCurve
+        {
+            get { return _AccelerationCurve; }
+            set
+            {
+                _AccelerationCurve = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+        #endregion
 
         /* Initialize default map properties */
         private void initMap()
@@ -236,7 +322,21 @@ namespace PILOTLOGGER
             }
         }
 
-        /*  */
+        /* Change visuals */
+        public void modifyValues(double velocity, double acceleration, double altitude)
+        {
+            int velConstant = 120; //Top speed is 120 mph
+            int accelConstant = 40; //Top acceleration is 40m/s^2
+            int altitudeConstant = 500; //Top altitude is 500m
+
+            this.Velocity = velocity;
+            this.Acceleration = acceleration;
+            this.Altitude = altitude;
+
+            this.VelocityCurve = (int)(((velocity * 240)/ velConstant) -120);
+            this.AccelerationCurve = (int)(((acceleration * accelConstant) / 100) - 120);
+            this.AltitudeCurve = (int)(((altitude * 240) / altitudeConstant) - 120);
+        }
 
     }
 }

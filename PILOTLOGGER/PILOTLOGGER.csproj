@@ -199,12 +199,7 @@
     <Resource Include="PILOTLOGO.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="StationaryLayer.png" />
-    <Resource Include="RollLayer.png" />
-    <Resource Include="TopBottomLayer.png" />
-    <Resource Include="skyground.png" />
     <Resource Include="compass.png" />
-    <Content Include="compassrose.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
