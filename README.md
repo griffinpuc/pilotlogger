@@ -1,6 +1,12 @@
 # PILOT Logger v0.2.1
 
-This is a Windows application designed to run with the PILOT RC wireless drone control hardware. The log tool provides automatic csv logging capabilities and real-time serial port monitoring.
+<p align="center">
+  <img src="images/PILOTLOGOINVERT.png">
+</p>
+
+This is a Windows application designed to run with the PILOT RC wireless drone control hardware. The log tool provides automatic csv logging capabilities and real-time serial port monitoring. This software will act as a fully functional base station featuring multiple telemetric monitoring capabilities including live GPS tracking.
+<br />
+<br />
 ![Logger Demo](images/graphexample.gif)
 
 ## Download and Install
@@ -18,7 +24,15 @@ By default, the application will write output into your user Documents folder.
 
 ## Hardware and More Information
 
-More information on hardware and other products:
+#### PILOT RC Firmware:
+* [Repo Link](https://github.com/mschindler301/TX250)
+
+#### More information on hardware and other products:
 * [PILOT RC Specifications](https://www.schindlerelectronics.com/specs)
 * [Other Downloads](https://www.schindlerelectronics.com/downloads)
 * [PILOT RC Tutorials](https://www.schindlerelectronics.com/getting-started)
+
+#### Collaborators
+
+* [Griffin Puc](https://github.com/griffinpuc), basestation software developer
+* [Matthew Schindler](https://github.com/mschindler301), firmware author and field testing
