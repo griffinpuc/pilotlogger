@@ -1,5 +1,3 @@
-# PILOT Logger v0.2.1
-
 <p align="center">
   <img src="images/PILOTLOGOINVERT.png">
 </p>
