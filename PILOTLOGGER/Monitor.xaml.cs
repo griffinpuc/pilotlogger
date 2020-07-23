@@ -1,4 +1,5 @@
 ﻿using AdonisUI;
+using HelixToolkit.Wpf;
 using LiveCharts;
 using LiveCharts.Wpf;
 using Microsoft.Maps.MapControl.WPF;
@@ -11,6 +12,8 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace PILOTLOGGER
 {
@@ -47,6 +50,9 @@ namespace PILOTLOGGER
         public SeriesCollection chartSeries;
         public string baseDirectory;
 
+        private Model3DGroup model;
+        ModelVisual3D device3D;
+
 
         public Monitor()
         {
@@ -61,9 +67,10 @@ namespace PILOTLOGGER
 
             initMap();
             initAltChart();
+            initModel();
 
-            FlightPlan plan = parseFlightplan("mountains.flight");
-            drawFlightPlan(plan);
+            //FlightPlan plan = parseFlightplan("mountains.flight");
+            //drawFlightPlan(plan);
 
         }
 
@@ -134,6 +141,39 @@ namespace PILOTLOGGER
             }
         }
 
+        private double _Latitude = 0;
+        public double Latitude
+        {
+            get { return _Latitude; }
+            set
+            {
+                _Latitude = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _Longitude = 0;
+        public double Longitude
+        {
+            get { return _Longitude; }
+            set
+            {
+                _Longitude = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _Roll = 0;
+        public double Roll
+        {
+            get { return _Roll; }
+            set
+            {
+                _Roll = value;
+                OnPropertyChanged();
+            }
+        }
+
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -152,7 +192,7 @@ namespace PILOTLOGGER
         /* Initialize default map properties */
         private void initMap()
         {
-            MainMap.Mode = new RoadMode();
+            MainMap.Mode = new AerialMode(); //or RoadMode();
             MainMap.Focus();
             MainMap.Center = new Location(34.0522, -118.2437);
             MainMap.ZoomLevel = 10;
@@ -162,12 +202,33 @@ namespace PILOTLOGGER
         private void initAltChart()
         {
             altchartSeries = new SeriesCollection();
-            altchart.ChartLegend.Visibility = Visibility.Visible;
+            //altchart.ChartLegend.Visibility = Visibility.Visible;
             altitudeSeries = new LineSeries();
             altitudeSeries.Values = new ChartValues<double>() { 0 };
             altchartSeries.Add(altitudeSeries);
         }
 
+        /* Init 3D Model */
+        private void initModel()
+        {
+            //ObjReader CurrentHelixObjReader = new ObjReader();
+
+            //ModelImporter importer = new ModelImporter();
+            //model = CurrentHelixObjReader.Read("VTOL-REDUCED.obj");
+
+            //Models.Content = model;
+
+            device3D = new ModelVisual3D();
+            ModelImporter import = new ModelImporter();
+
+            //Load the 3D model file
+            device3D.Content = import.Load("VTOL-REDUCED.obj");
+
+            // Add to view port
+            Viewport.Children.Add(device3D);
+
+
+        }
 
         /* Initialize the graph and set properties */
         public void initChart()
@@ -222,6 +283,7 @@ namespace PILOTLOGGER
         public void setChartDefault()
         {
             chartSeries.Add(serialValues[0]);
+            graphcombo.SelectedItem = graphcombo.Items[0];
         }
 
         /* Modify which value is graphed from combobox */
@@ -264,8 +326,6 @@ namespace PILOTLOGGER
                     chart.Series = chartSeries;
                 }));
             }
-
-            Console.WriteLine();
         }
 
         /* Parse flightplan file into object */
@@ -316,14 +376,14 @@ namespace PILOTLOGGER
                 }
 
                 altitudeSeries.Values.Add(marker.altitude);
-                altchart.Series = altchartSeries;
+                //altchart.Series = altchartSeries;
 
                 markerCount++;
             }
         }
 
         /* Change visuals */
-        public void modifyValues(double velocity, double acceleration, double altitude)
+        public void modifyValues(double velocity, double acceleration, double altitude, double lat, double lng)
         {
             int velConstant = 120; //Top speed is 120 mph
             int accelConstant = 40; //Top acceleration is 40m/s^2
@@ -332,10 +392,31 @@ namespace PILOTLOGGER
             this.Velocity = velocity;
             this.Acceleration = acceleration;
             this.Altitude = altitude;
+            this.Latitude = lat;
+            this.Longitude = lng;
 
             this.VelocityCurve = (int)(((velocity * 240)/ velConstant) -120);
             this.AccelerationCurve = (int)(((acceleration * accelConstant) / 100) - 120);
             this.AltitudeCurve = (int)(((altitude * 240) / altitudeConstant) - 120);
+
+            var axis = new Vector3D(0, 0, 1);
+            var angle = 1;
+
+            try
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    var matrix = device3D.Transform.Value;
+                    matrix.Rotate(new Quaternion(axis, angle));
+                    device3D.Transform = new MatrixTransform3D(matrix);
+                }));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+
+
         }
 
     }

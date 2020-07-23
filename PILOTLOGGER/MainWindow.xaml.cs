@@ -47,7 +47,9 @@ namespace PILOTLOGGER {
             AdonisUI.ResourceLocator.SetColorScheme(Application.Current.Resources, ResourceLocator.DarkColorScheme);
             InitializeComponent();
             applicationStartup();
+
         }
+
 
         /* When X is pressed */
         protected override void OnClosed(EventArgs e)
@@ -166,9 +168,7 @@ namespace PILOTLOGGER {
                             string parsedLine = readLine.Replace("\t", ",");
 
                             //Write out to various processes
-                            Console.WriteLine(readLine);
                             OutputQueue.Add(parsedLine);
-                            monitorWindow.modifyContents(parsedLine);
 
                             //Every x cycles, modiy graph
                             if ((iter%10) == 0)
@@ -349,6 +349,8 @@ namespace PILOTLOGGER {
             double velocity = 0;
             double acceleration = 0;
             double altitude = 0;
+            double latitude = 0;
+            double longitude = 0;
 
             string[] codes = schemaCode.Split(',');
             string[] inputVals = serialInput.Split(',');
@@ -367,9 +369,17 @@ namespace PILOTLOGGER {
                 {
                     altitude = double.Parse(inputVals[i]);
                 }
+                else if (codes[i] == ("latitude"))
+                {
+                    latitude = double.Parse(inputVals[i]);
+                }
+                else if (codes[i] == ("longitude"))
+                {
+                    longitude = double.Parse(inputVals[i]);
+                }
             }
 
-            monitorWindow.modifyValues(velocity, acceleration, altitude);
+            monitorWindow.modifyValues(velocity, acceleration, altitude, latitude, longitude);
         }
     }
 }
