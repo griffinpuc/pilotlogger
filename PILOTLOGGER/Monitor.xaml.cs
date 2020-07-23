@@ -50,6 +50,8 @@ namespace PILOTLOGGER
         public SeriesCollection chartSeries;
         public string baseDirectory;
 
+        Pushpin droneLocationPin;
+
         private Model3DGroup model;
         ModelVisual3D device3D;
 
@@ -65,9 +67,15 @@ namespace PILOTLOGGER
             serialValues = new LineSeries[schemaCodeList.Count];
             baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC";
 
-            initMap();
-            initAltChart();
-            initModel();
+            try
+            {
+                initMap();
+                initModel();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             //FlightPlan plan = parseFlightplan("mountains.flight");
             //drawFlightPlan(plan);
@@ -196,36 +204,33 @@ namespace PILOTLOGGER
             MainMap.Focus();
             MainMap.Center = new Location(34.0522, -118.2437);
             MainMap.ZoomLevel = 10;
-        }
 
-        /* Initialize the altitude graph */
-        private void initAltChart()
-        {
-            altchartSeries = new SeriesCollection();
-            //altchart.ChartLegend.Visibility = Visibility.Visible;
-            altitudeSeries = new LineSeries();
-            altitudeSeries.Values = new ChartValues<double>() { 0 };
-            altchartSeries.Add(altitudeSeries);
+            ControlTemplate template = (ControlTemplate)this.FindResource("DroneLocationTemplate");
+            droneLocationPin = new Pushpin();
+            droneLocationPin.Template = template;
+            droneLocationPin.Location = MainMap.Center;
+            MainMap.Children.Add(droneLocationPin);
+            
         }
 
         /* Init 3D Model */
         private void initModel()
         {
-            //ObjReader CurrentHelixObjReader = new ObjReader();
+            try
+            {
+                device3D = new ModelVisual3D();
+                ModelImporter import = new ModelImporter();
 
-            //ModelImporter importer = new ModelImporter();
-            //model = CurrentHelixObjReader.Read("VTOL-REDUCED.obj");
+                //Load the 3D model file
+                device3D.Content = import.Load(baseDirectory + "\\models\\VTOL-REDUCED.obj");
 
-            //Models.Content = model;
-
-            device3D = new ModelVisual3D();
-            ModelImporter import = new ModelImporter();
-
-            //Load the 3D model file
-            device3D.Content = import.Load("VTOL-REDUCED.obj");
-
-            // Add to view port
-            Viewport.Children.Add(device3D);
+                // Add to view port
+                Viewport.Children.Add(device3D);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("VTOL Model Not found \n" + ex.Message);
+            }
 
 
         }
@@ -399,6 +404,7 @@ namespace PILOTLOGGER
             this.AccelerationCurve = (int)(((acceleration * accelConstant) / 100) - 120);
             this.AltitudeCurve = (int)(((altitude * 240) / altitudeConstant) - 120);
 
+
             var axis = new Vector3D(0, 0, 1);
             var angle = 1;
 
@@ -406,6 +412,8 @@ namespace PILOTLOGGER
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
+                    droneLocationPin.Location = new Location(lat, lng);
+
                     var matrix = device3D.Transform.Value;
                     matrix.Rotate(new Quaternion(axis, angle));
                     device3D.Transform = new MatrixTransform3D(matrix);

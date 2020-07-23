@@ -10,6 +10,24 @@
         mc:Ignorable="d"
         Title="Monitor" Height="1242" Width="2132" Background="#FF2C2C2C" WindowState="Maximized" WindowStyle="SingleBorderWindow">
 
+    <Window.Resources>
+        <ControlTemplate x:Key="DroneLocationTemplate" TargetType="m:Pushpin">
+            <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <Grid Margin="0" Width="20" Height="20">
+                        <Ellipse Fill="#00A4EF" Stroke="#FF005167"/>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    Margin="0" TextBlock.FontFamily="Segoe UI" TextBlock.FontWeight="Bold" TextBlock.Foreground="#FFB8D30B">
+                        </ContentPresenter>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </ControlTemplate>
+    </Window.Resources>
+
     <Viewbox>
         <Grid Margin="10,10,-4,32" Height="919" Width="1615">
 
