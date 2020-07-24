@@ -12,6 +12,12 @@ This is a Windows application designed to run with the PILOT RC wireless drone c
 The latest Windows installer can be downloaded in the [releases section](https://github.com/griffinpuc/pilotlogger/releases) of the repo.
 Installing is easy, simply follow the installer.
 
+| Release      | Download |
+| ----------- | ----------- |
+| Latest Stable | [PilotLogger v0.3.6](https://github.com/griffinpuc/pilotlogger/releases/download/0.3.6/pilotlogger-v0.3.6.exe)       |
+| Latest PreRelease   | [PilotLogger PreRelease v0.3.6](https://github.com/griffinpuc/pilotlogger/releases/download/0.3.6/pilotlogger-v0.3.6.exe)        |
+| Previous Stable   | [PilotLogger v0.2.1](https://github.com/griffinpuc/pilotlogger/releases/download/0.2.1/pilotlogger-v0.2.1.exe)        |
+
 ## Usage
 
 In order to begin logging, one must specify a data schema and COM port. There is a default data schema installed by default, though one must create a custom schema depending on the implementation. This will not affect the functionality of the application and is only used to assign labels to data columns in the csv.
