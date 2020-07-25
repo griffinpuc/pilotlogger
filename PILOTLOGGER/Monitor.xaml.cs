@@ -202,6 +202,39 @@ namespace PILOTLOGGER
             }
         }
 
+        private double _Heading = 0;
+        public double Heading
+        {
+            get { return _Heading; }
+            set
+            {
+                _Heading = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _HeadingUpperLimit = 10;
+        public double HeadingUpperLimit
+        {
+            get { return _HeadingUpperLimit; }
+            set
+            {
+                _HeadingUpperLimit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _HeadingLowerLimit = -10;
+        public double HeadingLowerLimit
+        {
+            get { return _HeadingLowerLimit; }
+            set
+            {
+                _HeadingLowerLimit = value;
+                OnPropertyChanged();
+            }
+        }
+
         private double _PitchLowerLimit = -80;
         public double PitchLowerLimit
         {
@@ -234,6 +267,7 @@ namespace PILOTLOGGER
                 OnPropertyChanged();
             }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -443,7 +477,7 @@ namespace PILOTLOGGER
         }
 
         /* Change visuals */
-        public void modifyValues(double velocity, double acceleration, double altitude, double lat, double lng, double roll, double pitch, double yaw)
+        public void modifyValues(double velocity, double acceleration, double altitude, double lat, double lng, double roll, double pitch, double yaw, double heading)
         {
             int velConstant = 120; //Top speed is 120 mph
             int accelConstant = 40; //Top acceleration is 40m/s^2
@@ -457,6 +491,7 @@ namespace PILOTLOGGER
             this.Roll = roll;
             this.Pitch = pitch;
             this.Yaw = yaw;
+            this.Heading = heading;
 
             this.VelocityCurve = (int)(((velocity * 240) / velConstant) - 120);
             this.AccelerationCurve = (int)(((acceleration * accelConstant) / 100) - 120);
@@ -465,8 +500,10 @@ namespace PILOTLOGGER
             this.RollUpperLimit = roll + 10;
             this.PitchLowerLimit = (pitch + 90) - 10;
             this.PitchUpperLimit = (pitch + 90) + 10;
+            this.HeadingLowerLimit = (heading) - 10;
+            this.HeadingUpperLimit = (heading) + 10;
 
-
+            /* 3D MODEL ROTATIONS */
             var axis = new Vector3D(0, 0, 1);
             var angle = 5;
 
@@ -485,8 +522,26 @@ namespace PILOTLOGGER
             {
                 Console.WriteLine(ex.StackTrace);
             }
+            /* END MODEL ROTATING */
 
 
+        }
+
+        /* Toggle dark overlay */
+        public void toggleOverlay()
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                if (darkGrid.Visibility == System.Windows.Visibility.Visible)
+                {
+                    darkGrid.Visibility = System.Windows.Visibility.Hidden;
+                }
+                else
+                {
+                    darkGrid.Visibility = System.Windows.Visibility.Visible;
+                }
+            }));
+           
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

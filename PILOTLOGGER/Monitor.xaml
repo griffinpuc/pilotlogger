@@ -12,7 +12,7 @@
 
     <Window.Resources>
         <ControlTemplate x:Key="DroneLocationTemplate" TargetType="m:Pushpin">
-            <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid x:Name="ContentGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden">
                 <StackPanel>
                     <Grid Margin="0" Width="20" Height="20">
                         <Ellipse Fill="#00A4EF" Stroke="#FF005167"/>
@@ -30,6 +30,16 @@
 
     <Viewbox>
         <Grid Margin="5,5,5,5" Height="990" Width="1780">
+            
+            <!--- DARK OVERLAY -->
+            <Grid x:Name="darkGrid" Margin="5,5,5,5" Height="990" Width="1780" Panel.ZIndex="100" Visibility="hidden">
+                <Grid Height="990" Width="1780" Panel.ZIndex="100" Opacity=".5" Background="#000000">
+
+                </Grid>
+                <GroupBox Header="Reconnecting" Margin="589,299,573,529" Panel.ZIndex="110" Opacity="1.0">
+                    <Label Content="ATTEMPTING RECONNECT" HorizontalAlignment="Left" Margin="162,37,0,0" VerticalAlignment="Top" Height="56" Width="275" FontSize="22"/>
+                </GroupBox>
+            </Grid>
 
             <GroupBox Header="3D Model View" Margin="417,651,1062,28" Panel.ZIndex="10" Background="#E51F1F1F">
                 <Grid>

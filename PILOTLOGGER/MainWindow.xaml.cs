@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 /*
 
@@ -196,8 +197,27 @@ namespace PILOTLOGGER {
                         }
                         catch(Exception ex)
                         {
-                            MessageBox.Show("Error Reading Serial Port Stream \n" + ex.Message);
-                            break;
+                            monitorWindow.toggleOverlay();
+                            while (true)
+                            {
+                                try
+                                {
+                                    serialPort.Open();
+                                }
+                                catch
+                                {
+
+                                }
+
+                                if (serialPort.IsOpen)
+                                {
+                                    monitorWindow.toggleOverlay();
+                                    break;
+                                }
+
+                                System.Threading.Thread.Sleep(1000);
+                            }
+
                         }
                     }
                     else
@@ -364,6 +384,7 @@ namespace PILOTLOGGER {
             double roll = 0;
             double pitch = 0;
             double yaw = 0;
+            double heading = 0;
 
             string[] codes = schemaCode.Split(',');
             string[] inputVals = serialInput.Split(',');
@@ -402,9 +423,13 @@ namespace PILOTLOGGER {
                 {
                     yaw = double.Parse(inputVals[i]);
                 }
+                else if (codes[i] == ("heading"))
+                {
+                    heading = double.Parse(inputVals[i]);
+                }
             }
 
-            monitorWindow.modifyValues(velocity, acceleration, altitude, latitude, longitude, roll, pitch, yaw);
+            monitorWindow.modifyValues(velocity, acceleration, altitude, latitude, longitude, roll, pitch, yaw, heading);
         }
     }
 }
