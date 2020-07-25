@@ -12,13 +12,6 @@ This is a Windows application designed to run with the PILOT RC wireless drone c
 The latest Windows installer can be downloaded in the [releases section](https://github.com/griffinpuc/pilotlogger/releases) of the repo.
 Installing is easy, simply follow the installer.
 
-| Release      | Download |
-| ----------- | ----------- |
-| Latest Stable | [PilotLogger v0.3.6](https://github.com/griffinpuc/pilotlogger/releases/download/0.3.6/pilotlogger-v0.3.6.exe)       |
-| Latest PreRelease   | [PilotLogger PreRelease v0.3.6](https://github.com/griffinpuc/pilotlogger/releases/download/0.3.6/pilotlogger-v0.3.6.exe)        |
-| Previous Stable   | [PilotLogger v0.2.1](https://github.com/griffinpuc/pilotlogger/releases/download/0.2.1/pilotlogger-v0.2.1.exe)        |
-<br />
-
 <p align="center">
   <img src="images/contentfeatures.png">
 </p>
