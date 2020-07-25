@@ -2,10 +2,9 @@
   <img src="images/newlogo.png">
 </p>
 
-This is a Windows application designed to run with the PILOT RC wireless drone control hardware. The log tool provides automatic csv logging capabilities and real-time serial port monitoring. This software will act as a fully functional base station featuring multiple telemetric monitoring capabilities including live GPS tracking.
+**PILOT RC Groundstaton** is a Windows application designed to run with the PILOT RC wireless drone control hardware. The log tool provides automatic csv logging capabilities and real-time serial port monitoring. This software acts as a fully functional base station featuring multiple telemetric monitoring capabilities including live GPS tracking integrated with Bing Maps API.
 <br />
 <br />
-<!-- ![Logger Demo](images/monitor.gif) -->
 
 ## Download and Install
 
