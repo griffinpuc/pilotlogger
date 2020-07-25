@@ -420,7 +420,7 @@ namespace PILOTLOGGER
                 ModelImporter import = new ModelImporter();
 
                 //Load the 3D model file
-                device3D.Content = import.Load(Directory.GetCurrentDirectory() + "\\vtolcolor.obj");
+                device3D.Content = import.Load(Directory.GetCurrentDirectory() + "\\carbonfiber-vtol.obj");
 
                 // Add to view port
                 Viewport.Children.Add(device3D);
