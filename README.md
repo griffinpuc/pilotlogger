@@ -19,6 +19,10 @@ Installing is easy, simply follow the installer.
 | Previous Stable   | [PilotLogger v0.2.1](https://github.com/griffinpuc/pilotlogger/releases/download/0.2.1/pilotlogger-v0.2.1.exe)        |
 <br />
 
+<p align="center">
+  <img src="images/contentfeatures.png">
+</p>
+
 ## Usage
 
 In order to begin logging, one must specify a data schema and COM port. There is a default data schema installed by default, though one must create a custom schema depending on the implementation. This will not affect the functionality of the application and is only used to assign labels to data columns in the csv.
