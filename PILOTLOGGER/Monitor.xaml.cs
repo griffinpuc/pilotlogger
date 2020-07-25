@@ -45,8 +45,6 @@ namespace PILOTLOGGER
 
         private List<string> schemaCodeList;
         private LineSeries[] serialValues;
-        private LineSeries altitudeSeries;
-        public SeriesCollection altchartSeries;
         public SeriesCollection chartSeries;
         public string baseDirectory;
 
@@ -66,21 +64,10 @@ namespace PILOTLOGGER
             schemaCodeList = new List<string>();
             serialValues = new LineSeries[schemaCodeList.Count];
             baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC";
-
-            try
-            {
-                initMap();
-                initModel();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            //FlightPlan plan = parseFlightplan("mountains.flight");
-            //drawFlightPlan(plan);
-
         }
+
+
+        #region INotifyPropertyChanged Members
 
         /* Live binded variables */
         private double _Velocity = 0;
@@ -182,7 +169,71 @@ namespace PILOTLOGGER
             }
         }
 
-        #region INotifyPropertyChanged Members
+        private double _RollLowerLimit = -10;
+        public double RollLowerLimit
+        {
+            get { return _RollLowerLimit; }
+            set
+            {
+                _RollLowerLimit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _RollUpperLimit = 10;
+        public double RollUpperLimit
+        {
+            get { return _RollUpperLimit; }
+            set
+            {
+                _RollUpperLimit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _Pitch = 0;
+        public double Pitch
+        {
+            get { return _Pitch; }
+            set
+            {
+                _Pitch = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _PitchLowerLimit = -80;
+        public double PitchLowerLimit
+        {
+            get { return _PitchLowerLimit; }
+            set
+            {
+                _PitchLowerLimit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _PitchUpperLimit = 80;
+        public double PitchUpperLimit
+        {
+            get { return _PitchUpperLimit; }
+            set
+            {
+                _PitchUpperLimit = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _Yaw = 0;
+        public double Yaw
+        {
+            get { return _Yaw; }
+            set
+            {
+                _Yaw = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -197,50 +248,12 @@ namespace PILOTLOGGER
         }
         #endregion
 
-        /* Initialize default map properties */
-        private void initMap()
-        {
-            MainMap.Mode = new AerialMode(); //or RoadMode();
-            MainMap.Focus();
-            MainMap.Center = new Location(34.0522, -118.2437);
-            MainMap.ZoomLevel = 10;
-
-            ControlTemplate template = (ControlTemplate)this.FindResource("DroneLocationTemplate");
-            droneLocationPin = new Pushpin();
-            droneLocationPin.Template = template;
-            droneLocationPin.Location = MainMap.Center;
-            MainMap.Children.Add(droneLocationPin);
-            
-        }
-
-        /* Init 3D Model */
-        private void initModel()
-        {
-            try
-            {
-                device3D = new ModelVisual3D();
-                ModelImporter import = new ModelImporter();
-
-                //Load the 3D model file
-                device3D.Content = import.Load(baseDirectory + "\\models\\VTOL-REDUCED.obj");
-
-                // Add to view port
-                Viewport.Children.Add(device3D);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("VTOL Model Not found \n" + ex.Message);
-            }
-
-
-        }
+        #region Live Chart Members
 
         /* Initialize the graph and set properties */
         public void initChart()
         {
             chartSeries = new SeriesCollection();
-            chart.LegendLocation = LegendLocation.Right;
-            chart.ChartLegend.Visibility = Visibility.Visible;
             chart.DisableAnimations = true;
         }
 
@@ -273,15 +286,6 @@ namespace PILOTLOGGER
 
                 index++;
             }
-        }
-
-        /* Modify contents of test label - may be removed */
-        public void modifyContents(string labelText)
-        {
-            Dispatcher.Invoke(new Action(() =>
-            {
-                //testlabel.Content = labelText;
-            }));
         }
 
         /* Set chart to graph the first value by default */
@@ -317,7 +321,7 @@ namespace PILOTLOGGER
                     chartValues.Add(double.Parse(value));
 
                     //Modifys chart to only graph x values at a time (simulate real time graphing)
-                    if (chartValues.Count > 100)
+                    if (chartValues.Count > 20)
                     {
                         chartValues.RemoveAt(0);
                     }
@@ -331,6 +335,26 @@ namespace PILOTLOGGER
                     chart.Series = chartSeries;
                 }));
             }
+        }
+
+        #endregion
+
+        #region GPS Mapping Members
+
+        /* Initialize default map properties */
+        public void initMap()
+        {
+            MainMap.Mode = new AerialMode(); //or RoadMode();
+            MainMap.Focus();
+            MainMap.Center = new Location(34.0522, -118.2437);
+            MainMap.ZoomLevel = 10;
+
+            ControlTemplate template = (ControlTemplate)this.FindResource("DroneLocationTemplate");
+            droneLocationPin = new Pushpin();
+            droneLocationPin.Template = template;
+            droneLocationPin.Location = MainMap.Center;
+            MainMap.Children.Add(droneLocationPin);
+
         }
 
         /* Parse flightplan file into object */
@@ -363,7 +387,7 @@ namespace PILOTLOGGER
         private void drawFlightPlan(FlightPlan flightPlan)
         {
             int markerCount = 0;
-            foreach(LocationMarker marker in flightPlan.locationMarkers)
+            foreach (LocationMarker marker in flightPlan.locationMarkers)
             {
                 Pushpin pin = new Pushpin();
                 pin.Location = marker.location;
@@ -380,15 +404,46 @@ namespace PILOTLOGGER
                     MainMap.Children.Add(polygon);
                 }
 
-                altitudeSeries.Values.Add(marker.altitude);
-                //altchart.Series = altchartSeries;
-
                 markerCount++;
             }
         }
 
+        #endregion
+
+
+        /* Init 3D Model */
+        public void initModel()
+        {
+            try
+            {
+                device3D = new ModelVisual3D();
+                ModelImporter import = new ModelImporter();
+
+                //Load the 3D model file
+                device3D.Content = import.Load(Directory.GetCurrentDirectory() + "\\vtolcolor.obj");
+
+                // Add to view port
+                Viewport.Children.Add(device3D);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("VTOL Model Not found \n" + ex.Message);
+            }
+
+
+        }
+
+        /* Modify contents of test label - may be removed */
+        public void modifyContents(string labelText)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                //testlabel.Content = labelText;
+            }));
+        }
+
         /* Change visuals */
-        public void modifyValues(double velocity, double acceleration, double altitude, double lat, double lng)
+        public void modifyValues(double velocity, double acceleration, double altitude, double lat, double lng, double roll, double pitch, double yaw)
         {
             int velConstant = 120; //Top speed is 120 mph
             int accelConstant = 40; //Top acceleration is 40m/s^2
@@ -399,14 +454,21 @@ namespace PILOTLOGGER
             this.Altitude = altitude;
             this.Latitude = lat;
             this.Longitude = lng;
+            this.Roll = roll;
+            this.Pitch = pitch;
+            this.Yaw = yaw;
 
-            this.VelocityCurve = (int)(((velocity * 240)/ velConstant) -120);
+            this.VelocityCurve = (int)(((velocity * 240) / velConstant) - 120);
             this.AccelerationCurve = (int)(((acceleration * accelConstant) / 100) - 120);
             this.AltitudeCurve = (int)(((altitude * 240) / altitudeConstant) - 120);
+            this.RollLowerLimit = roll - 10;
+            this.RollUpperLimit = roll + 10;
+            this.PitchLowerLimit = (pitch + 90) - 10;
+            this.PitchUpperLimit = (pitch + 90) + 10;
 
 
             var axis = new Vector3D(0, 0, 1);
-            var angle = 1;
+            var angle = 5;
 
             try
             {
@@ -427,5 +489,9 @@ namespace PILOTLOGGER
 
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+        }
     }
 }

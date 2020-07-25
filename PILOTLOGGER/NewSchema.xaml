@@ -10,7 +10,7 @@
         <GroupBox Header="Create a New Schema">
             <Grid>
                 <TextBox x:Name="schematext" HorizontalAlignment="Left" Height="61" Margin="10,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="385"/>
-                <Button x:Name="schemasubmit" Content="Button" HorizontalAlignment="Left" Margin="58,155,0,0" VerticalAlignment="Top" Width="289" Height="43" Click="addSchema"/>
+                <Button x:Name="schemasubmit" Content="Submit" HorizontalAlignment="Left" Margin="58,155,0,0" VerticalAlignment="Top" Width="289" Height="43" Click="addSchema"/>
                 <TextBox x:Name="newschemaname" HorizontalAlignment="Left" Height="22" Margin="10,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="385"/>
                 <Label Content="Schema Name:" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="136"/>
                 <Label Content="Schema Contents: " HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="106"/>

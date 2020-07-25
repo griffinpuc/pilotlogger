@@ -11,7 +11,7 @@
             <Grid>
                 <Button Click="uploadSchema" Content="Add New" HorizontalAlignment="Left" Margin="265,71,0,0" VerticalAlignment="Top" Width="98"/>
                 <ComboBox x:Name="schemacombo" HorizontalAlignment="Left" Margin="20,71,0,0" VerticalAlignment="Top" Width="226"/>
-                <TextBox x:Name="outputBox" HorizontalAlignment="Left" Height="23" Margin="20,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226" IsEnabled="False"/>
+                <TextBox x:Name="outputBox" HorizontalAlignment="Left" Height="23" Margin="20,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="226" IsEnabled="False" FontSize="8"/>
                 <Button Click="openFolder" Content="Open Folder" HorizontalAlignment="Left" Margin="265,144,0,0" VerticalAlignment="Top" Width="98"/>
                 <Label Content="Serial Data Schema" HorizontalAlignment="Left" Margin="134,47,0,0" VerticalAlignment="Top"/>
                 <Label Content="Log Output Directory" HorizontalAlignment="Left" Margin="124,118,0,0" VerticalAlignment="Top"/>

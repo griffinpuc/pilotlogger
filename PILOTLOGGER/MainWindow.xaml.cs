@@ -29,11 +29,8 @@ namespace PILOTLOGGER {
     {
 
         SerialPort serialPort;
-        string workingDirectory;
-        string userDocumentsPath;
         string schemaCode;
         string baseDirectory;
-        int schemaValueCount;
         bool isLogging;
         List<string> schemaNames = new List<string>();
 
@@ -50,7 +47,6 @@ namespace PILOTLOGGER {
 
         }
 
-
         /* When X is pressed */
         protected override void OnClosed(EventArgs e)
         {
@@ -62,12 +58,9 @@ namespace PILOTLOGGER {
         /* Application startup tasks */
         private void applicationStartup()
         {
-            workingDirectory = Directory.GetCurrentDirectory();
             threads = new Dictionary<string, CancellationTokenSource>();
-            userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC";
-
-            outputBox.Text = userDocumentsPath;
+            outputBox.Text = baseDirectory + "\\logs";
 
             monitorCOM();
             monitorSchemas();
@@ -143,10 +136,33 @@ namespace PILOTLOGGER {
             {
                 //Launch and initialize monitor window
                 monitorWindow = new Monitor();
+
+                //Initialize charts
+                try
+                {
+                    monitorWindow.initChart();
+                    monitorWindow.setValues(schemaCode);
+                    monitorWindow.setChartDefault();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("Error Initializing Live Chart \n" + ex.Message);
+                }
+
+                //Initialize models
+                try
+                {
+                    monitorWindow.initMap();
+                    monitorWindow.initModel();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("Error Initializing Live Model \n" + ex.Message);
+                }
+
+                //Show the monitor window
                 monitorWindow.Show();
-                monitorWindow.initChart();
-                monitorWindow.setValues(schemaCode);
-                monitorWindow.setChartDefault();
+
             }));
 
             await Task.Run(() =>
@@ -178,9 +194,10 @@ namespace PILOTLOGGER {
                             }
                             
                         }
-                        catch
+                        catch(Exception ex)
                         {
-                            Console.WriteLine("Error error error...");
+                            MessageBox.Show("Error Reading Serial Port Stream \n" + ex.Message);
+                            break;
                         }
                     }
                     else
@@ -213,19 +230,12 @@ namespace PILOTLOGGER {
             }
         }
 
-        /* Load the output directory and set the label */
-        public void loadOutputDir()
-        {
-            outputBox.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        }
-
         /* Update schema combobox on selection */
         private void selectSchema(object sender, RoutedEventArgs e)
         {
             schemacombo.SelectedItem = sender;
             schemacombo.IsDropDownOpen = false;
             schemaCode = File.ReadAllText(baseDirectory + "\\schemas\\" + schemacombo.Text);
-            schemaValueCount = schemaCode.Split(',').Length;
         }
 
         /* Open the output folder */
@@ -240,7 +250,6 @@ namespace PILOTLOGGER {
             NewSchema newSchemaWindow = new NewSchema(baseDirectory + "\\schemas\\");
             newSchemaWindow.Show();
         }
-
 
         /* Monitor COM ports for any changes and update combo */
         private async void monitorCOM()
@@ -344,6 +353,7 @@ namespace PILOTLOGGER {
             }));
         }
 
+        /* Push serial stream line to monitor */
         private void setLabels(string serialInput)
         {
             double velocity = 0;
@@ -351,6 +361,9 @@ namespace PILOTLOGGER {
             double altitude = 0;
             double latitude = 0;
             double longitude = 0;
+            double roll = 0;
+            double pitch = 0;
+            double yaw = 0;
 
             string[] codes = schemaCode.Split(',');
             string[] inputVals = serialInput.Split(',');
@@ -377,9 +390,21 @@ namespace PILOTLOGGER {
                 {
                     longitude = double.Parse(inputVals[i]);
                 }
+                else if (codes[i] == ("roll"))
+                {
+                    roll = double.Parse(inputVals[i]);
+                }
+                else if (codes[i] == ("pitch"))
+                {
+                    pitch = double.Parse(inputVals[i]);
+                }
+                else if (codes[i] == ("yaw"))
+                {
+                    yaw = double.Parse(inputVals[i]);
+                }
             }
 
-            monitorWindow.modifyValues(velocity, acceleration, altitude, latitude, longitude);
+            monitorWindow.modifyValues(velocity, acceleration, altitude, latitude, longitude, roll, pitch, yaw);
         }
     }
 }

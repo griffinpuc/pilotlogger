@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:PILOTLOGGER"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
-            xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:HelixToolkit="http://helix-toolkit.org/wpf"
+            xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:HelixToolkit="http://helix-toolkit.org/wpf" xmlns:geared="clr-namespace:LiveCharts.Geared;assembly=LiveCharts.Geared"
         mc:Ignorable="d"
-        Title="Monitor" Height="1242" Width="2132" Background="#FF2C2C2C" WindowState="Maximized" WindowStyle="SingleBorderWindow">
+        Title="Monitor" Height="1268" Width="2252" Background="#FF2C2C2C" WindowState="Maximized" WindowStyle="SingleBorderWindow">
 
     <Window.Resources>
         <ControlTemplate x:Key="DroneLocationTemplate" TargetType="m:Pushpin">
@@ -29,13 +29,18 @@
     </Window.Resources>
 
     <Viewbox>
-        <Grid Margin="10,10,-4,32" Height="919" Width="1615">
+        <Grid Margin="5,5,5,5" Height="990" Width="1780">
 
-            <GroupBox Header="Telemetric Data" Margin="0,10,1250,542">
+            <GroupBox Header="3D Model View" Margin="417,651,1062,28" Panel.ZIndex="10" Background="#E51F1F1F">
                 <Grid>
-                    <Image HorizontalAlignment="Left" Height="1102" VerticalAlignment="Top" Width="1148" Source="grid.png" Margin="-404,110,-395,-893"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="173*"/>
+                        <ColumnDefinition Width="135*"/>
+                        <ColumnDefinition Width="41*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image HorizontalAlignment="Left" Height="1102" VerticalAlignment="Top" Width="1148" Source="grid.png" Margin="-434,80,-429,-939" Grid.ColumnSpan="3"/>
 
-                    <HelixToolkit:HelixViewport3D x:Name="Viewport" ZoomExtentsWhenLoaded="True">
+                    <HelixToolkit:HelixViewport3D x:Name="Viewport" ZoomExtentsWhenLoaded="True" Grid.ColumnSpan="3" Margin="0,0,0,10">
                         <HelixToolkit:SunLight/>
                         <ModelVisual3D x:Name="Models"/>
                     </HelixToolkit:HelixViewport3D>
@@ -43,10 +48,14 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="Positional Data" Margin="0,382,1250,267">
+            <GroupBox Header="Alignment Metrics" Margin="0,316,1389,348">
                 <Grid>
-                    <Label Content="HEADING" VerticalAlignment="Top" Margin="53,187,238,0"/>
-                    <Grid Margin="10,36,195,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="225*"/>
+                        <ColumnDefinition Width="124*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="HEADING" VerticalAlignment="Top" Margin="63,157,122,0"/>
+                    <Grid Margin="10,0,71,121">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ed:Arc StartAngle="-180" EndAngle="179" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
                             <ed:Arc StartAngle="-10" EndAngle="10" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
@@ -56,53 +65,55 @@
                             <TextBlock x:Name="headingval" Text="20"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
                         </StackPanel>
                     </Grid>
-                    <Grid Margin="199,38,0,44">
+                    <Grid Margin="199,0,0,121" Grid.ColumnSpan="2">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ed:Arc StartAngle="-180" EndAngle="179" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
-                            <ed:Arc StartAngle="-10" EndAngle="10" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
+                            <ed:Arc StartAngle="{Binding Path=RollLowerLimit}" EndAngle="{Binding Path=RollUpperLimit}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                         </Grid>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock x:Name="rollval" Text="0"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                            <TextBlock x:Name="rollval" Text="{Binding Path=Roll}"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
                         </StackPanel>
                     </Grid>
-                    <Label Content="ROLL" VerticalAlignment="Top" Margin="260,187,59,0"/>
+                    <Grid Margin="97,111,102,10" Grid.ColumnSpan="2">
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ed:Arc StartAngle="0" EndAngle="-175" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                            <ed:Arc StartAngle="{Binding Path=PitchLowerLimit}" EndAngle="{Binding Path=PitchUpperLimit}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
+                        </Grid>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock x:Name="pitchal" Text="{Binding Path=Pitch}"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                        </StackPanel>
+                    </Grid>
+                    <Label Content="ROLL" VerticalAlignment="Top" Grid.Column="1" Margin="31,157,74,0"/>
+                    <Label Content="PITCH" VerticalAlignment="Top" Margin="170,262,36,0"/>
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="Live GPS Monitoring" Margin="370,10,10,-17">
+            <GroupBox Header="Live GPS Monitoring" Margin="396,10,10,10">
                 <Grid>
 
                     <m:Map x:Name="MainMap" CredentialsProvider="Am8fO-_nP0e8k7HcIDnOG7JzvbNlc2rMdGYmF3-5Yp0WfgyVqz7MevsWFcq4ze3k" Mode="Aerial" Margin="0,0,0,-2">
 
                     </m:Map>
-                    <GroupBox Header="Telemetric Data" HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="1103" Margin="56,10,0,0" Opacity="0.97" Background="#E51F1F1F">
+                    <GroupBox Header="Pilot Dashboard" HorizontalAlignment="Left" Height="184" VerticalAlignment="Top" Width="1021" Margin="327,728,0,0" Opacity="0.97" Background="#E51F1F1F">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="108*"/>
                                 <ColumnDefinition Width="979*"/>
                             </Grid.ColumnDefinitions>
 
-
-                            <Grid Grid.ColumnSpan="2" Margin="0,0,881,0">
-                                <Label Content="POSITIONAL METRICS" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="16" Width="178"/>
-                                <Label Content="LATITUDE:" Margin="10,34,30.852,63"/>
-                                <Label Content="{Binding Path=Latitude}" HorizontalAlignment="Left" Margin="95,32,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
-                                <Label Content="LONGITUDE:" Margin="10,64,21,43"/>
-                                <Label Content="{Binding Path=Longitude}" HorizontalAlignment="Left" Margin="95,63,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
-                                <Label Content="ALTITUDE:" Margin="10,92,21,15"/>
-                                <Label Content="{Binding Path=Altitude}" HorizontalAlignment="Left" Margin="95,90,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
+                            <Grid>
                             </Grid>
-                            <Grid Grid.Column="1" Margin="158,0,587,0">
-                                <Label Content="ALIGNMENT METRICS" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="170" FontSize="16"/>
+                            <Grid Margin="10,0,819,3" Grid.ColumnSpan="2">
+                                <Label Content="ALIGNMENT METRICS" HorizontalAlignment="Left" Margin="10,0,-48,0" VerticalAlignment="Top" Width="198" FontSize="16"/>
                                 <Label Content="ROLL:" Margin="10,34,30.852,63"/>
-                                <Label Content="{Binding Path=Altitude}" HorizontalAlignment="Left" Margin="95,32,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
+                                <Label Content="{Binding Path=Roll}" HorizontalAlignment="Left" Margin="95,32,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
                                 <Label Content="PITCH:" Margin="10,64,21,43"/>
-                                <Label Content="{Binding Path=Altitude}" HorizontalAlignment="Left" Margin="95,63,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
+                                <Label Content="{Binding Path=Pitch}" HorizontalAlignment="Left" Margin="95,63,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
                                 <Label Content="YAW:" Margin="10,92,21,15"/>
-                                <Label Content="{Binding Path=Altitude}" HorizontalAlignment="Left" Margin="95,90,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
+                                <Label Content="{Binding Path=Yaw}" HorizontalAlignment="Left" Margin="95,90,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2" Foreground="Turquoise"/>
                             </Grid>
-                            <Grid Margin="451.148,10,388,-10" Grid.Column="1">
-                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid Margin="125,10,642,0" Grid.Column="1">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,-2,0,0" Height="115">
                                     <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
                                     <ed:Arc StartAngle="-120" EndAngle="{Binding Path=VelocityCurve}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                                 </Grid>
@@ -111,30 +122,42 @@
                                     <TextBlock x:Name="speedval" Text="{Binding Path=Velocity}" Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
                                 </StackPanel>
                             </Grid>
-                            <Grid Margin="616.148,6,222,-6" Grid.Column="1">
-                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid Margin="299,13,468,3" Grid.Column="1">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,-2,0,0" Height="115">
                                     <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
                                     <ed:Arc StartAngle="-120" EndAngle="{Binding Path=AccelerationCurve}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                                 </Grid>
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock Foreground="#FF878A9F" HorizontalAlignment="Center" FontSize="10">m/s<Run BaselineAlignment="Superscript">2</Run></TextBlock>
-                                    <TextBlock x:Name="accelval" Text="{Binding Path=Acceleration}"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                                    <TextBlock x:Name="accelval" Text="{Binding Acceleration}" Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
                                 </StackPanel>
                             </Grid>
-                            <Grid Margin="781.148,3,58,-2" Grid.Column="1">
-                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid Margin="471,10,296,0" Grid.Column="1">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,-2,0,0" Height="115">
                                     <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
                                     <ed:Arc StartAngle="-120" EndAngle="{Binding Path=AltitudeCurve}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                                 </Grid>
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock Text="meters" Foreground="#FF878A9F" HorizontalAlignment="Center" FontSize="10"/>
-                                    <TextBlock x:Name="altitudeval" Text="{Binding Path=Altitude}"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                                    <TextBlock x:Name="altval" Text="{Binding Path=Altitude}" Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
                                 </StackPanel>
                             </Grid>
-                            <Label Content="VELOCITY" HorizontalAlignment="Left" Margin="494.148,105,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-                            <Label Content="ACCELERATION" HorizontalAlignment="Left" Margin="644.148,105,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-                            <Label Content="ALTITUDE" HorizontalAlignment="Left" Margin="824.148,105,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                            <Grid Margin="635,13,132,3" Grid.Column="1">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,-2,0,0" Height="115">
+                                    <ed:Arc StartAngle="-120" EndAngle="120" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                                    <ed:Arc StartAngle="-120" EndAngle="{Binding Path=AltitudeCurve}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
+                                </Grid>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="meters" Foreground="#FF878A9F" HorizontalAlignment="Center" FontSize="10"/>
+                                    <TextBlock x:Name="sealevelaltval" Text="{Binding Path=Altitude}" Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Label Content="VELOCITY" HorizontalAlignment="Left" Margin="169,117,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                            <Label Content="ACCELERATION" HorizontalAlignment="Left" Margin="331,120,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                            <Label Content="ALTITUDE" HorizontalAlignment="Left" Margin="519,120,0,0" VerticalAlignment="Top" Grid.Column="1"/>
                             <Label HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top"/>
+                            <Label Content="REL ALTITUDE" HorizontalAlignment="Left" Margin="671,117,0,0" VerticalAlignment="Top" Grid.Column="1"/>
 
                         </Grid>
                     </GroupBox>
@@ -143,18 +166,25 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="Live Monitor" Margin="804,674,32,10" Background="#E51F1F1F">
+            <GroupBox Header="Live Data Stream" Margin="0,647,1389,12">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="53*"/>
-                        <ColumnDefinition Width="237*"/>
+                        <ColumnDefinition Width="139*"/>
+                        <ColumnDefinition Width="147*"/>
+                        <ColumnDefinition Width="477*"/>
                     </Grid.ColumnDefinitions>
-                    <lvc:CartesianChart x:Name="chart" Series="{Binding chartSeries}" Margin="10,29,10,10" Grid.ColumnSpan="2" />
-                    <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.617,-0.333"/>
+                    <lvc:CartesianChart x:Name="chart" Series="{Binding chartSeries}" Margin="10,0,10,10" Grid.ColumnSpan="3" />
+
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Something Else" Margin="0,666,1250,-17">
+
+
+            <GroupBox Header="PILOT RC Groundstation" Margin="0,10,1389,679">
                 <Grid>
+                    <Image HorizontalAlignment="Left" Height="65" Margin="67,0,0,0" VerticalAlignment="Top" Width="218" Source="PILOTLOGO.png"/>
+                    <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="193" RenderTransformOrigin="0.617,-0.333"/>
+                    <Label Content="TOGGLE LIVE MONITOR VALUE:" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="193"/>
+                    <Button Content="Kill Monitor" HorizontalAlignment="Left" Margin="267,221,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click"/>
 
                 </Grid>
             </GroupBox>

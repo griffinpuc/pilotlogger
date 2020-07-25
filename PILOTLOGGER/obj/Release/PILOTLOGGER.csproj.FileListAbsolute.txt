@@ -107,3 +107,4 @@ C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.DXGI.pdb
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.DXGI.xml
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.Mathematics.pdb
 C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.Mathematics.xml
+C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\LiveCharts.Geared.dll
