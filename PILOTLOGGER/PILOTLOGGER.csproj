@@ -203,12 +203,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="defaultfiles\carbonfiber-vtol.mtl" />
+    <None Include="defaultfiles\carbonfiber-vtol.obj" />
+    <None Include="defaultfiles\default.schema" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="schemas\default.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -239,6 +241,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="grid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="splash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="newlogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -454,7 +454,7 @@ namespace PILOTLOGGER
                 ModelImporter import = new ModelImporter();
 
                 //Load the 3D model file
-                device3D.Content = import.Load(Directory.GetCurrentDirectory() + "\\carbonfiber-vtol.obj");
+                device3D.Content = import.Load(baseDirectory + "\\models\\vtolcolor.obj");
 
                 // Add to view port
                 Viewport.Children.Add(device3D);
@@ -507,21 +507,24 @@ namespace PILOTLOGGER
             var axis = new Vector3D(0, 0, 1);
             var angle = 5;
 
-            try
+            Dispatcher.Invoke(new Action(() =>
             {
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    droneLocationPin.Location = new Location(lat, lng);
+                droneLocationPin.Location = new Location(lat, lng);
+            }));
 
-                    var matrix = device3D.Transform.Value;
-                    matrix.Rotate(new Quaternion(axis, angle));
-                    device3D.Transform = new MatrixTransform3D(matrix);
-                }));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
-            }
+            //try
+            //{
+
+
+            //        var matrix = device3D.Transform.Value;
+            //        matrix.Rotate(new Quaternion(axis, angle));
+            //        device3D.Transform = new MatrixTransform3D(matrix);
+            //    }));
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.StackTrace);
+            //}
             /* END MODEL ROTATING */
 
 

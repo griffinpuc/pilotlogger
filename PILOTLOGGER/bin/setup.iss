@@ -137,9 +137,9 @@ Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.Ma
 Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.Mathematics.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.Mathematics.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\SharpDX.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\vtolcolor.mtl"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\vtolcolor.obj"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\VTOL-REDUCED.mtl"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\carbonfiber-vtol.mtl"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\carbonfiber-vtol.obj"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\VTOL-REDUCED.mtl"; DestDir: "{userdesktop}"; Flags: ignoreversion
 Source: "C:\Users\griff\Workspace\pilotlogger\PILOTLOGGER\bin\Release\VTOL-REDUCED.obj"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

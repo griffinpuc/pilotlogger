@@ -56,15 +56,46 @@ namespace PILOTLOGGER {
             Application.Current.Shutdown();
         }
 
+        private void createBaseDirectory()
+        {
+            InitializeComponent();
+
+            System.IO.Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC\\flightplans");
+            System.IO.Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC\\logs");
+        }
+
         /* Application startup tasks */
         private void applicationStartup()
         {
+            createBaseDirectory()
             threads = new Dictionary<string, CancellationTokenSource>();
             baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC";
             outputBox.Text = baseDirectory + "\\logs";
 
             monitorCOM();
             monitorSchemas();
+
+            //Create and open the monitor window
+            Dispatcher.Invoke(new Action(() =>
+            {
+                //Launch and initialize monitor window
+                monitorWindow = new Monitor();
+
+                //Initialize models
+                try
+                {
+                    monitorWindow.initMap();
+                    monitorWindow.initModel();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error Initializing Live Model \n" + ex.Message);
+                }
+
+                //Show the monitor window
+                monitorWindow.Show();
+
+            }));
         }
 
         /* COM monitoring startup tasks (pre monitoring) */
@@ -132,12 +163,8 @@ namespace PILOTLOGGER {
             string outputFilename =  "PILOTLOG_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
             var outputTask = Task.Factory.StartNew(() => writeFile(outputFilename), TaskCreationOptions.LongRunning);
 
-            //Create and open the monitor window
             Dispatcher.Invoke(new Action(() =>
             {
-                //Launch and initialize monitor window
-                monitorWindow = new Monitor();
-
                 //Initialize charts
                 try
                 {
@@ -145,25 +172,10 @@ namespace PILOTLOGGER {
                     monitorWindow.setValues(schemaCode);
                     monitorWindow.setChartDefault();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show("Error Initializing Live Chart \n" + ex.Message);
                 }
-
-                //Initialize models
-                try
-                {
-                    monitorWindow.initMap();
-                    monitorWindow.initModel();
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show("Error Initializing Live Model \n" + ex.Message);
-                }
-
-                //Show the monitor window
-                monitorWindow.Show();
-
             }));
 
             await Task.Run(() =>

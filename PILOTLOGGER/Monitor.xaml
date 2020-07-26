@@ -30,7 +30,7 @@
 
     <Viewbox>
         <Grid Margin="5,5,5,5" Height="990" Width="1780">
-            
+            <Image HorizontalAlignment="Left" Height="142" Margin="0,10,0,0" VerticalAlignment="Top" Width="381" Source="newlogo.png"/>
             <!--- DARK OVERLAY -->
             <Grid x:Name="darkGrid" Margin="5,5,5,5" Height="990" Width="1780" Panel.ZIndex="100" Visibility="hidden">
                 <Grid Height="990" Width="1780" Panel.ZIndex="100" Opacity=".5" Background="#000000">
@@ -68,11 +68,11 @@
                     <Grid Margin="10,0,71,121">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ed:Arc StartAngle="-180" EndAngle="179" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
-                            <ed:Arc StartAngle="-10" EndAngle="10" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
+                            <ed:Arc StartAngle="{Binding Path=HeadingLowerLimit}" EndAngle="{Binding Path=HeadingLowerLimit}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                         </Grid>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Foreground="#FF878A9F" HorizontalAlignment="Center" FontSize="10">N</TextBlock>
-                            <TextBlock x:Name="headingval" Text="20"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
+                            <TextBlock x:Name="headingval" Text="{Binding Path=Heading}"  Foreground="White" HorizontalAlignment="Center" FontSize="30" FontWeight="Light"/>
                         </StackPanel>
                     </Grid>
                     <Grid Margin="199,0,0,121" Grid.ColumnSpan="2">
@@ -189,12 +189,12 @@
             </GroupBox>
 
 
-            <GroupBox Header="PILOT RC Groundstation" Margin="0,10,1389,679">
+            <GroupBox Header="PILOT RC Groundstation" Margin="0,167,1389,679">
                 <Grid>
-                    <Image HorizontalAlignment="Left" Height="65" Margin="67,0,0,0" VerticalAlignment="Top" Width="218" Source="PILOTLOGO.png"/>
-                    <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="193" RenderTransformOrigin="0.617,-0.333"/>
-                    <Label Content="TOGGLE LIVE MONITOR VALUE:" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="193"/>
-                    <Button Content="Kill Monitor" HorizontalAlignment="Left" Margin="267,221,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click"/>
+
+                    <ComboBox x:Name="graphcombo" HorizontalAlignment="Left" Margin="10,29,0,0" VerticalAlignment="Top" Width="193" RenderTransformOrigin="0.617,-0.333"/>
+                    <Label Content="TOGGLE LIVE MONITOR VALUE:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Width="193"/>
+                    <Button Content="Kill Monitor" HorizontalAlignment="Left" Margin="267,65,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click"/>
 
                 </Grid>
             </GroupBox>

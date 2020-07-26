@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("grid.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("newlogo.png")]
 
 
