@@ -68,6 +68,7 @@
                     <Grid Margin="10,0,71,121">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ed:Arc StartAngle="-180" EndAngle="179" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                            <ed:Arc StartAngle="-1" EndAngle="3" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="DodgerBlue" Panel.ZIndex="100"/>
                             <ed:Arc StartAngle="{Binding Path=HeadingLowerLimit}" EndAngle="{Binding Path=HeadingLowerLimit}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                         </Grid>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -78,6 +79,8 @@
                     <Grid Margin="199,0,0,121" Grid.ColumnSpan="2">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ed:Arc StartAngle="-180" EndAngle="179" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                            <ed:Arc StartAngle="-1" EndAngle="3" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="DodgerBlue" Panel.ZIndex="100"/>
+
                             <ed:Arc StartAngle="{Binding Path=RollLowerLimit}" EndAngle="{Binding Path=RollUpperLimit}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                         </Grid>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -87,6 +90,7 @@
                     <Grid Margin="97,111,102,10" Grid.ColumnSpan="2">
                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ed:Arc StartAngle="0" EndAngle="-175" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="#FF484D5F"/>
+                            <ed:Arc StartAngle="89" EndAngle="93" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="DodgerBlue" Panel.ZIndex="100"/>
                             <ed:Arc StartAngle="{Binding Path=PitchLowerLimit}" EndAngle="{Binding Path=PitchUpperLimit}" Stretch="None" Height="130" Width="130" StrokeThickness="15" StrokeDashArray=".25" Stroke="Turquoise" />
                         </Grid>
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

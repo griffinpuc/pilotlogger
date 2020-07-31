@@ -67,7 +67,7 @@ namespace PILOTLOGGER {
         /* Application startup tasks */
         private void applicationStartup()
         {
-            createBaseDirectory()
+            createBaseDirectory();
             threads = new Dictionary<string, CancellationTokenSource>();
             baseDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PilotRC";
             outputBox.Text = baseDirectory + "\\logs";
@@ -405,11 +405,20 @@ namespace PILOTLOGGER {
             {
                 if (codes[i] == ("velocity"))
                 {
-                    velocity = double.Parse(inputVals[i]);
+                    double vel = double.Parse(inputVals[i]);
+                    if(vel > 0)
+                    {
+                        velocity = vel;
+                    }
+                    
                 }
                 else if (codes[i] == ("acceleration"))
                 {
-                    acceleration = double.Parse(inputVals[i]);
+                    double accl = double.Parse(inputVals[i]); 
+                    if(accl > 0)
+                    {
+                        acceleration = accl;
+                    }
                 }
                 else if (codes[i] == ("altitude"))
                 {
